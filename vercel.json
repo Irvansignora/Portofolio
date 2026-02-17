@@ -1,15 +1,18 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "index.html",
-      "use": "@vercel/static"
-    }
-  ],
+  "outputDirectory": ".",
   "routes": [
     {
+      "src": "/irvan.jpg",
+      "dest": "/irvan.jpg"
+    },
+    {
+      "src": "/logo.png",
+      "dest": "/logo.png"
+    },
+    {
       "src": "/(.*)",
-      "dest": "/$1"
+      "dest": "/index.html"
     }
   ]
 }
