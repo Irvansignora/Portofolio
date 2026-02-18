@@ -11,7 +11,7 @@ const portfolioData = [
     tech: ['WordPress', 'Data Analysis', 'Reporting'],
     img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=500&fit=crop&q=80',
     alt: 'Sales Analytics Dashboard',
-    liveUrl: null,
+    liveUrl: 'https://lookerstudio.google.com/u/1/navigation/reporting',
     noGallery: true,
   },
   {
