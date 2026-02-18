@@ -60,7 +60,7 @@ const portfolioData = [
     images: [
       { src: 'nihongo.jpg', title: 'Japanese Language Proficiency', caption: 'JLPT Certification — Basic Japanese proficiency for daily conversation' },
       { src: 'deutsch.jpg', title: 'German Language Certificate', caption: 'Deutsch Zertifikat — Elementary German language competency' },
-      { src: 'hlc-1.jpg', title: 'HLC Award 1', caption: 'Recognition of excellence and outstanding contribution' },
+      { src: 'hlc1.jpg', title: 'HLC Award 1', caption: 'Recognition of excellence and outstanding contribution' },
       { src: 'hlc-2.jpg', title: 'HLC Award 2', caption: 'Recognition of excellence and outstanding contribution' },
       { src: 'ms-excel-1.jpg', title: 'Microsoft Excel Certification', caption: 'Advanced spreadsheet & data analysis proficiency' },
       { src: 'ms-Excel-2.jpg', title: 'Microsoft Excel — Advanced', caption: 'Expert-level Excel skills for financial reporting' },
@@ -244,11 +244,13 @@ export default function Home() {
     })
     setLightbox({ open: true, images: normalized, index, title })
     document.body.style.overflow = 'hidden'
+    document.body.classList.add('lightbox-open')
   }
   
   const closeLightbox = () => {
     setLightbox(l => ({ ...l, open: false }))
     document.body.style.overflow = 'auto'
+    document.body.classList.remove('lightbox-open')
   }
 
   const changeImage = (dir) => {
