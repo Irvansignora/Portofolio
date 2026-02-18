@@ -56,7 +56,7 @@ const portfolioData = [
     img: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&h=500&fit=crop&q=80',
     alt: 'Credentials & Recognition',
     liveUrl: null,
-    images: ['/Nihongo.jpg','/Deutsch.jpg','/HLC 1.jpg','/HLC 2.jpg','/Ms Excel 1.jpg','/Ms Excel 2.jpg'],
+    images: ['/nihongo.jpg','/deutsch.jpg','/hlc-1.jpg','/hlc-2.jpg','/ms-excel-1.jpg','/ms-Excel-2.jpg'],
   },
   {
     id: 'portfolio-6',
