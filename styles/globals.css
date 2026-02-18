@@ -1145,9 +1145,12 @@ footer p { font-size: 0.92rem; letter-spacing: 0.06em; }
 .lightbox {
   display: none;
   position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.96);
-  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.97);
+  z-index: 99999;
   opacity: 0;
   transition: opacity 0.3s ease;
   cursor: none;
@@ -1159,21 +1162,22 @@ footer p { font-size: 0.92rem; letter-spacing: 0.06em; }
   flex-direction: column;
   opacity: 1;
   align-items: center;
-  justify-content: center;
-  padding: 60px 1rem 1rem;
+  justify-content: flex-start;
 }
 
 .lightbox-content {
   position: relative;
   width: 100%;
-  max-width: 1000px;
+  height: 100vh;
+  max-width: 1100px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0;
-  flex: 1;
   justify-content: center;
-  min-height: 0;
+  padding: 70px 1rem 10px;
+  gap: 0;
+  box-sizing: border-box;
 }
 
 .lightbox-image-wrapper {
@@ -1183,13 +1187,11 @@ footer p { font-size: 0.92rem; letter-spacing: 0.06em; }
   align-items: center;
   justify-content: center;
   padding: 0 60px;
-  flex: 1;
-  min-height: 0;
 }
 
 .lightbox-image {
   max-width: 100%;
-  max-height: 70vh;
+  max-height: calc(100vh - 180px);
   width: auto;
   height: auto;
   object-fit: contain;
