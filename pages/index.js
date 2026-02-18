@@ -225,8 +225,11 @@ export default function Home() {
     return () => window.removeEventListener('keydown', onKey)
   }, [lightbox.open, lightbox.images.length])
 
-  const openLightbox = (images, title, index = 0) => {
-    const prefixed = images.map(img => img.startsWith('http') ? img : `/${img}`)
+    const openLightbox = (images, title, index = 0) => {
+      const prefixed = images.map(img => {
+        if (img.startsWith('http') || img.startsWith('/')) return img
+        return `/${img}`
+    })
     setLightbox({ open: true, images: prefixed, index, title })
     document.body.style.overflow = 'hidden'
   }
