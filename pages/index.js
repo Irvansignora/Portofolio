@@ -50,11 +50,11 @@ const portfolioData = [
   {
     id: 'portfolio-5',
     tag: 'Professional Development',
-    title: 'Certificates & Achievements',
+    title: 'Credentials & Recognition',
     description: 'A collection of professional certifications and achievements earned across sales management, financial administration, and business operations.',
     tech: ['Sales Training', 'Finance', 'Management'],
     img: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&h=500&fit=crop&q=80',
-    alt: 'Certificates & Achievements',
+    alt: 'Credentials & Recognition',
     liveUrl: null,
     isCert: true,
     images: ['porto-5-1.jpg','porto-5-2.jpg','porto-5-3.jpg','porto-5-4.jpg','porto-5-5.jpg','porto-5-6.jpg'],
