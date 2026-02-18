@@ -63,7 +63,7 @@ const portfolioData = [
       { src: 'hlc1.jpg', title: 'HLC Award 1', caption: 'Recognition of excellence and outstanding contribution' },
       { src: 'hlc-2.jpg', title: 'HLC Award 2', caption: 'Recognition of excellence and outstanding contribution' },
       { src: 'msexcel1.jpg', title: 'Microsoft Excel Certification', caption: 'Advanced spreadsheet & data analysis proficiency' },
-      { src: 'msExcel2.jpg', title: 'Microsoft Excel — Advanced', caption: 'Expert-level Excel skills for financial reporting' },
+      { src: 'msexcel2.jpg', title: 'Microsoft Excel — Advanced', caption: 'Expert-level Excel skills for financial reporting' },
     ],
   },
   {
