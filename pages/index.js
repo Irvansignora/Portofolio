@@ -56,7 +56,15 @@ const portfolioData = [
     img: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&h=500&fit=crop&q=80',
     alt: 'Credentials & Recognition',
     liveUrl: null,
-    images: ['/nihongo.jpg','/deutsch.jpg','/hlc-1.jpg','/hlc-2.jpg','/ms-excel-1.jpg','/ms-Excel-2.jpg'],
+    isCert: true,
+    images: [
+      { src: 'nihongo.jpg', title: 'Japanese Language Proficiency', caption: 'JLPT Certification — Basic Japanese proficiency for daily conversation' },
+      { src: 'deutsch.jpg', title: 'German Language Certificate', caption: 'Deutsch Zertifikat — Elementary German language competency' },
+      { src: 'hlc-1.jpg', title: 'HLC Award 1', caption: 'Recognition of excellence and outstanding contribution' },
+      { src: 'hlc-2.jpg', title: 'HLC Award 2', caption: 'Recognition of excellence and outstanding contribution' },
+      { src: 'ms-excel-1.jpg', title: 'Microsoft Excel Certification', caption: 'Advanced spreadsheet & data analysis proficiency' },
+      { src: 'ms-Excel-2.jpg', title: 'Microsoft Excel — Advanced', caption: 'Expert-level Excel skills for financial reporting' },
+    ],
   },
   {
     id: 'portfolio-6',
@@ -225,12 +233,16 @@ export default function Home() {
     return () => window.removeEventListener('keydown', onKey)
   }, [lightbox.open, lightbox.images.length])
 
-    const openLightbox = (images, title, index = 0) => {
-      const prefixed = images.map(img => {
-        if (img.startsWith('http') || img.startsWith('/')) return img
-        return `/${img}`
+  const openLightbox = (images, title, index = 0) => {
+    const normalized = images.map(img => {
+      if (typeof img === 'object') {
+        const src = img.src.startsWith('http') || img.src.startsWith('/') ? img.src : `/${img.src}`
+        return { src, title: img.title || title, caption: img.caption || '' }
+      }
+      const src = img.startsWith('http') || img.startsWith('/') ? img : `/${img}`
+      return { src, title, caption: '' }
     })
-    setLightbox({ open: true, images: prefixed, index, title })
+    setLightbox({ open: true, images: normalized, index, title })
     document.body.style.overflow = 'hidden'
   }
   
@@ -466,20 +478,39 @@ export default function Home() {
           </div>
 
           {/* Lightbox Portfolio */}
-          {lightbox.open && (
-            <div className="lightbox active" onClick={(e) => { if (e.target.classList.contains('lightbox')) closeLightbox() }}>
-              <div className="lightbox-close" onClick={closeLightbox}>×</div>
-              <div className="lightbox-content">
-                <div className="lightbox-image-wrapper">
-                  <div className="lightbox-nav lightbox-prev" onClick={() => changeImage(-1)}>‹</div>
-                  <img className="lightbox-image" src={lightbox.images[lightbox.index]} alt={lightbox.title} />
-                  <div className="lightbox-nav lightbox-next" onClick={() => changeImage(1)}>›</div>
+          {lightbox.open && (() => {
+            const current = lightbox.images[lightbox.index]
+            const src = typeof current === 'object' ? current.src : current
+            const slideTitle = typeof current === 'object' ? current.title : lightbox.title
+            const slideCaption = typeof current === 'object' ? current.caption : ''
+            return (
+              <div className="lightbox active" onClick={(e) => { if (e.target.classList.contains('lightbox')) closeLightbox() }}>
+                <div className="lightbox-close" onClick={closeLightbox}>×</div>
+                <div className="lightbox-content">
+                  <div className="lightbox-image-wrapper">
+                    <div className="lightbox-nav lightbox-prev" onClick={() => changeImage(-1)}>‹</div>
+                    <img className="lightbox-image" src={src} alt={slideTitle} />
+                    <div className="lightbox-nav lightbox-next" onClick={() => changeImage(1)}>›</div>
+                  </div>
+                  <div className="lightbox-counter">{lightbox.index + 1} / {lightbox.images.length}</div>
+                  <div className="lightbox-slide-info">
+                    <div className="lightbox-slide-title">{slideTitle}</div>
+                    {slideCaption && <div className="lightbox-slide-caption">{slideCaption}</div>}
+                  </div>
+                  {/* Dot indicators */}
+                  <div className="lightbox-dots">
+                    {lightbox.images.map((_, i) => (
+                      <span
+                        key={i}
+                        className={`lightbox-dot ${i === lightbox.index ? 'active' : ''}`}
+                        onClick={() => setLightbox(l => ({ ...l, index: i }))}
+                      />
+                    ))}
+                  </div>
                 </div>
-                <div className="lightbox-counter">{lightbox.index + 1} / {lightbox.images.length}</div>
-                <div className="lightbox-title">{lightbox.title}</div>
               </div>
-            </div>
-          )}
+            )
+          })()}
         </section>
       )}
       {activePage === 'skills' && (
@@ -545,23 +576,38 @@ export default function Home() {
           </div>
 
           {/* Lightbox */}
-          {lightbox.open && (
-            <div
-              className="lightbox active"
-              onClick={(e) => { if (e.target.classList.contains('lightbox')) closeLightbox() }}
-            >
-              <div className="lightbox-close" onClick={closeLightbox}>×</div>
-              <div className="lightbox-content">
-                <div className="lightbox-image-wrapper">
-                  <div className="lightbox-nav lightbox-prev" onClick={() => changeImage(-1)}>‹</div>
-                  <img className="lightbox-image" src={lightbox.images[lightbox.index]} alt={lightbox.title} />
-                  <div className="lightbox-nav lightbox-next" onClick={() => changeImage(1)}>›</div>
+          {lightbox.open && (() => {
+            const current = lightbox.images[lightbox.index]
+            const src = typeof current === 'object' ? current.src : current
+            const slideTitle = typeof current === 'object' ? current.title : lightbox.title
+            const slideCaption = typeof current === 'object' ? current.caption : ''
+            return (
+              <div className="lightbox active" onClick={(e) => { if (e.target.classList.contains('lightbox')) closeLightbox() }}>
+                <div className="lightbox-close" onClick={closeLightbox}>×</div>
+                <div className="lightbox-content">
+                  <div className="lightbox-image-wrapper">
+                    <div className="lightbox-nav lightbox-prev" onClick={() => changeImage(-1)}>‹</div>
+                    <img className="lightbox-image" src={src} alt={slideTitle} />
+                    <div className="lightbox-nav lightbox-next" onClick={() => changeImage(1)}>›</div>
+                  </div>
+                  <div className="lightbox-counter">{lightbox.index + 1} / {lightbox.images.length}</div>
+                  <div className="lightbox-slide-info">
+                    <div className="lightbox-slide-title">{slideTitle}</div>
+                    {slideCaption && <div className="lightbox-slide-caption">{slideCaption}</div>}
+                  </div>
+                  <div className="lightbox-dots">
+                    {lightbox.images.map((_, i) => (
+                      <span
+                        key={i}
+                        className={`lightbox-dot ${i === lightbox.index ? 'active' : ''}`}
+                        onClick={() => setLightbox(l => ({ ...l, index: i }))}
+                      />
+                    ))}
+                  </div>
                 </div>
-                <div className="lightbox-counter">{lightbox.index + 1} / {lightbox.images.length}</div>
-                <div className="lightbox-title">{lightbox.title}</div>
               </div>
-            </div>
-          )}
+            )
+          })()}
         </section>
       )}
 
