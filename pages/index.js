@@ -52,7 +52,7 @@ const portfolioData = [
     tag: 'Professional Development',
     title: 'Credentials & Recognition',
     description: 'A portfolio of credentials and recognitions highlighting professional excellence, cross-cultural communication, and meaningful community contribution.',
-    tech: ['Certifications', 'Employee Awards', 'Community Service'],
+    tech: ['Certifications', 'Awards', 'Community Service'],
     img: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&h=500&fit=crop&q=80',
     alt: 'Credentials & Recognition',
     liveUrl: null,
