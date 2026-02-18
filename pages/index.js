@@ -56,7 +56,7 @@ const portfolioData = [
     img: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&h=500&fit=crop&q=80',
     alt: 'Credentials & Recognition',
     liveUrl: null,
-    images: ['Nihongo.jpg','Deutsch.jpg','HLC 1.jpg','HLC 2.jpg','Ms Excel 1.jpg','Ms Excel 2.jpg'],
+    images: ['/Nihongo.jpg','/Deutsch.jpg','/HLC 1.jpg','/HLC 2.jpg','/Ms Excel 1.jpg','/Ms Excel 2.jpg'],
   },
   {
     id: 'portfolio-6',
@@ -226,10 +226,11 @@ export default function Home() {
   }, [lightbox.open, lightbox.images.length])
 
   const openLightbox = (images, title, index = 0) => {
-    setLightbox({ open: true, images, index, title })
+    const prefixed = images.map(img => img.startsWith('http') ? img : `/${img}`)
+    setLightbox({ open: true, images: prefixed, index, title })
     document.body.style.overflow = 'hidden'
   }
-
+  
   const closeLightbox = () => {
     setLightbox(l => ({ ...l, open: false }))
     document.body.style.overflow = 'auto'
