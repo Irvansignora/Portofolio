@@ -705,6 +705,8 @@ nav {
   transition: all 0.45s cubic-bezier(0.16,1,0.3,1);
   cursor: none;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .portfolio-card::before {
