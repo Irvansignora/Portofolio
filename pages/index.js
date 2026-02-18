@@ -57,7 +57,7 @@ const portfolioData = [
     alt: 'Credentials & Recognition',
     liveUrl: null,
     isCert: true,
-    images: ['porto-5-1.jpg','porto-5-2.jpg','porto-5-3.jpg','porto-5-4.jpg','porto-5-5.jpg','porto-5-6.jpg'],
+    images: ['Nihongo.jpg','Deutsch.jpg','HLC 1.jpg','HLC 2.jpg','Ms Excel 1.jpg','Ms Excel 2.jpg'],
   },
   {
     id: 'portfolio-6',
