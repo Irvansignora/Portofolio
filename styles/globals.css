@@ -1202,8 +1202,8 @@ footer p { font-size: 0.92rem; letter-spacing: 0.06em; }
 }
 
 .lightbox-close {
-  position: fixed;
-  top: 20px; right: 20px;
+  position: absolute;
+  top: 16px; right: 16px;
   width: 44px; height: 44px;
   background: rgba(255,0,234,0.15);
   border: 1px solid var(--neon-magenta);
@@ -1215,7 +1215,8 @@ footer p { font-size: 0.92rem; letter-spacing: 0.06em; }
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
-  z-index: 10001;
+  z-index: 100000;
+  flex-shrink: 0;
 }
 
 .lightbox-close:hover {
