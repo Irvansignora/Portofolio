@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tax Dashboard — Muhamad Irpan Yasin</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0e17;
+    --card: #111827;
+    --card2: #161f30;
+    --border: #1e2d47;
+    --accent: #00d4ff;
+    --accent2: #ff6b35;
+    --accent3: #7c3aed;
+    --accent4: #10b981;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --gold: #f59e0b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 16px 48px;
+  }
+
+  /* ====================== HEADER ====================== */
+  header {
+    padding: 24px 0 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 12px;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .header-left .tag {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+    opacity: 0.8;
+  }
+
+  .header-left h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(20px, 4vw, 36px);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.1;
+  }
+
+  .header-left h1 span { color: var(--accent); }
+
+  .header-right { text-align: right; }
+
+  .header-right .name {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .header-right .dept {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .badge {
+    display: inline-block;
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    color: var(--accent);
+    font-size: 10px;
+    letter-spacing: 2px;
+    padding: 3px 10px;
+    border-radius: 2px;
+    margin-top: 6px;
+    text-transform: uppercase;
+  }
+
+  /* ====================== SECTION LABEL ====================== */
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ====================== KPI CARDS ====================== */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+
+  @media (min-width: 640px) {
+    .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  @media (min-width: 1024px) {
+    .kpi-grid { grid-template-columns: repeat(6, 1fr); }
+  }
+
+  .kpi-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+
+  .kpi-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+  }
+
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--card-accent, var(--accent));
+  }
+
+  .kpi-card .kpi-label {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+
+  .kpi-card .kpi-value {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(15px, 2.5vw, 22px);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+  }
+
+  .kpi-card .kpi-sub {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 5px;
+    line-height: 1.3;
+  }
+
+  .kpi-card .kpi-icon {
+    position: absolute;
+    right: 12px;
+    top: 14px;
+    font-size: 18px;
+    opacity: 0.2;
+  }
+
+  /* ====================== CHART GRID ====================== */
+  .chart-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  @media (min-width: 768px) {
+    .chart-grid { grid-template-columns: 2fr 1fr; }
+  }
+
+  .chart-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  @media (min-width: 768px) {
+    .chart-grid-2 { grid-template-columns: 1fr 1fr; }
+  }
+
+  .chart-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 16px;
+  }
+
+  .chart-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 3px;
+  }
+
+  .chart-card .chart-sub {
+    font-size: 9px;
+    color: var(--muted);
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+
+  .chart-wrapper { position: relative; }
+
+  /* ====================== TASK TABLE ====================== */
+  .table-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+
+  @media (min-width: 768px) {
+    .table-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  .task-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 16px;
+  }
+
+  .task-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 3px;
+  }
+
+  .task-card .task-sub {
+    font-size: 9px;
+    color: var(--muted);
+    margin-bottom: 14px;
+    letter-spacing: 1px;
+  }
+
+  .task-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(30, 45, 71, 0.6);
+  }
+
+  .task-item:last-child { border-bottom: none; }
+
+  .task-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 600;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .task-text {
+    font-size: 11px;
+    color: #c4cdd6;
+    line-height: 1.5;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .task-badge {
+    font-size: 9px;
+    padding: 2px 7px;
+    border-radius: 2px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    margin-top: 2px;
+    white-space: nowrap;
+  }
+
+  .badge-daily { background: rgba(0,212,255,0.1); color: var(--accent); border: 1px solid rgba(0,212,255,0.25); }
+  .badge-monthly { background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.25); }
+  .badge-yearly { background: rgba(245,158,11,0.1); color: var(--gold); border: 1px solid rgba(245,158,11,0.25); }
+
+  /* ====================== PERUSAHAAN PILLS ====================== */
+  .company-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.6s 0.15s ease both;
+  }
+
+  @media (min-width: 480px) {
+    .company-row { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .company-pill {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: border-color 0.2s;
+  }
+
+  .company-pill:hover { border-color: var(--accent); }
+
+  .company-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .company-pill .co-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .company-pill .co-desc {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+
+  /* ====================== STATS BOTTOM ====================== */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.6s 0.4s ease both;
+  }
+
+  @media (min-width: 640px) {
+    .stats-row { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  @media (min-width: 1024px) {
+    .stats-row { grid-template-columns: repeat(6, 1fr); }
+  }
+
+  .stat-mini {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .stat-mini .icon-box {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .stat-mini .sm-label {
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .stat-mini .sm-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    color: #fff;
+    margin-top: 2px;
+  }
+
+  /* ====================== PROGRESS BARS ====================== */
+  .progress-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 16px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.6s 0.45s ease both;
+  }
+
+  .progress-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 3px;
+  }
+
+  .progress-card .pc-sub {
+    font-size: 9px;
+    color: var(--muted);
+    margin-bottom: 18px;
+    letter-spacing: 1px;
+  }
+
+  .prog-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .prog-label {
+    font-size: 10px;
+    color: #c4cdd6;
+    width: 100%;
+    margin-bottom: 4px;
+  }
+
+  @media (min-width: 600px) {
+    .prog-label {
+      width: 200px;
+      margin-bottom: 0;
+    }
+  }
+
+  .prog-bar-bg {
+    flex: 1;
+    min-width: 100px;
+    height: 6px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .prog-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 1.5s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  .prog-val {
+    font-size: 10px;
+    color: var(--muted);
+    width: 80px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* Yearly task grid */
+  .yearly-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  @media (min-width: 640px) {
+    .yearly-grid { grid-template-columns: 1fr 1fr; gap: 0 24px; }
+  }
+
+  /* ====================== FOOTER ====================== */
+  footer {
+    border-top: 1px solid var(--border);
+    padding-top: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    animation: fadeUp 0.6s 0.5s ease both;
+  }
+
+  footer .f-left, footer .f-right {
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  /* ====================== ANIMATIONS ====================== */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .live-dot {
+    display: inline-block;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--accent4);
+    margin-right: 6px;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.4); }
+  }
+
+  .highlight-dec { color: var(--accent2); font-weight: 600; }
+
+  /* Scrollable table on mobile */
+  .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-left">
+      <div class="tag">TAX Dashboard · UDN Group Jakarta · 2025</div>
+      <h1>Portofolio <span>Perpajakan</span><br>RDTN & GRD</h1>
+    </div>
+    <div class="header-right">
+      <div class="name">Muhamad Irpan Yasin</div>
+      <div class="dept">Tax UDN Group Jakarta</div>
+      <div class="badge"><span class="live-dot"></span>Aktif sejak Jan 2023</div>
+    </div>
+  </header>
+
+  <!-- COMPANIES HANDLED -->
+  <div class="section-label">Perusahaan yang Ditangani</div>
+  <div class="company-row">
+    <div class="company-pill">
+      <div class="company-dot" style="background:#00d4ff"></div>
+      <div>
+        <div class="co-name">RDTN</div>
+        <div class="co-desc">Rama Digital Teknologi Nusantara</div>
+      </div>
+    </div>
+    <div class="company-pill">
+      <div class="company-dot" style="background:#ff6b35"></div>
+      <div>
+        <div class="co-name">GRD</div>
+        <div class="co-desc">Golden Rama Digital</div>
+      </div>
+    </div>
+    <div class="company-pill">
+      <div class="company-dot" style="background:#7c3aed"></div>
+      <div>
+        <div class="co-name">UDN</div>
+        <div class="co-desc">Unirama Duta Niaga · 38 Cabang</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI CARDS -->
+  <div class="section-label">Ringkasan Pajak 2025 — RDTN</div>
+  <div class="kpi-grid">
+    <div class="kpi-card" style="--card-accent: #00d4ff">
+      <div class="kpi-icon">🏛️</div>
+      <div class="kpi-label">Total PPN (2025)</div>
+      <div class="kpi-value">Rp 5,59 M</div>
+      <div class="kpi-sub">Lebih Bayar Akumulasi</div>
+    </div>
+    <div class="kpi-card" style="--card-accent: #ff6b35">
+      <div class="kpi-icon">👤</div>
+      <div class="kpi-label">Total PPH-21</div>
+      <div class="kpi-value">Rp 78,9 Jt</div>
+      <div class="kpi-sub">PJK semua periode</div>
+    </div>
+    <div class="kpi-card" style="--card-accent: #10b981">
+      <div class="kpi-icon">📊</div>
+      <div class="kpi-label">Total PPH-23</div>
+      <div class="kpi-value">Rp 132,3 Jt</div>
+      <div class="kpi-sub">Outcome Tax Jan–Des</div>
+    </div>
+    <div class="kpi-card" style="--card-accent: #f59e0b">
+      <div class="kpi-icon">🏢</div>
+      <div class="kpi-label">Total PPH 4(2)</div>
+      <div class="kpi-value">Rp 281,1 Jt</div>
+      <div class="kpi-sub">Final withholding tax</div>
+    </div>
+    <div class="kpi-card" style="--card-accent: #7c3aed">
+      <div class="kpi-icon">💰</div>
+      <div class="kpi-label">Grand Total Pajak</div>
+      <div class="kpi-value">Rp 6,08 M</div>
+      <div class="kpi-sub">Seluruh jenis pajak</div>
+    </div>
+    <div class="kpi-card" style="--card-accent: #ec4899">
+      <div class="kpi-icon">📋</div>
+      <div class="kpi-label">Faktur RDTN/bln</div>
+      <div class="kpi-value">~300</div>
+      <div class="kpi-sub">±20/hari via Coretax</div>
+    </div>
+  </div>
+
+  <!-- CHARTS ROW 1 -->
+  <div class="section-label">Visualisasi Data Pajak Bulanan</div>
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>Tren PPN Bulanan 2025</h3>
+      <div class="chart-sub">LEBIH BAYAR PPN RDTN (RP)</div>
+      <div class="chart-wrapper">
+        <canvas id="ppnChart" height="100"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h3>Komposisi Pajak</h3>
+      <div class="chart-sub">DISTRIBUSI SEMUA JENIS PAJAK</div>
+      <div class="chart-wrapper">
+        <canvas id="donutChart" height="180"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHARTS ROW 2 -->
+  <div class="chart-grid-2">
+    <div class="chart-card">
+      <h3>Total Pajak Per Bulan</h3>
+      <div class="chart-sub">SEMUA JENIS PAJAK DIGABUNG (RP)</div>
+      <div class="chart-wrapper">
+        <canvas id="totalChart" height="130"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h3>PPH-21 vs PPH-23 vs PPH 4(2)</h3>
+      <div class="chart-sub">PERBANDINGAN JENIS WITHHOLDING TAX</div>
+      <div class="chart-wrapper">
+        <canvas id="pphChart" height="130"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- TASK BREAKDOWN -->
+  <div class="section-label">Rincian Job Description 2026</div>
+  <div class="table-grid">
+    <!-- Daily -->
+    <div class="task-card">
+      <h3>Tugas Harian</h3>
+      <div class="task-sub">DILAKUKAN SETIAP HARI KERJA · CORETAX</div>
+      <div class="task-item">
+        <div class="task-num" style="background:rgba(0,212,255,0.1);color:var(--accent)">1</div>
+        <div class="task-text">Pembuatan Faktur Pajak RDTN — Convert Excel ke XML → Import di Coretax → Cetak</div>
+        <div class="task-badge badge-daily">~20/hr</div>
+      </div>
+      <div class="task-item">
+        <div class="task-num" style="background:rgba(0,212,255,0.1);color:var(--accent)">2</div>
+        <div class="task-text">Pembuatan Faktur Pajak GRD — Convert Excel ke XML → Import di Coretax → Cetak</div>
+        <div class="task-badge badge-daily">~1/hr</div>
+      </div>
+      <div class="task-item">
+        <div class="task-num" style="background:rgba(0,212,255,0.1);color:var(--accent)">3</div>
+        <div class="task-text">Pembuatan Bukti Potong PPh RDTN — Input data di Coretax sesuai data → Cetak</div>
+        <div class="task-badge badge-daily">~1/hr</div>
+      </div>
+      <div class="task-item">
+        <div class="task-num" style="background:rgba(0,212,255,0.1);color:var(--accent)">4</div>
+        <div class="task-text">Pembuatan Bukti Potong PPh GRD — Input data di Coretax → Cetak bukti potong</div>
+        <div class="task-badge badge-daily">~1/hr</div>
+      </div>
+    </div>
+
+    <!-- Monthly -->
+    <div class="task-card">
+      <h3>Tugas Bulanan</h3>
+      <div class="task-sub">DEADLINE RUTIN TIAP BULAN · CORETAX + ERP</div>
+      <div class="task-item">
+        <div class="task-num" style="background:rgba(124,58,237,0.1);color:#a78bfa">1</div>
+        <div class="task-text">Rekap & Lapor PPh Unifikasi RDTN — Setiap tgl 10</div>
+        <div class="task-badge badge-monthly">Tgl 10</div>
+      </div>
+      <div class="task-item">
+        <div class="task-num" style="background:rgba(124,58,237,0.1);color:#a78bfa">2</div>
+        <div class="task-text">Rekap & Lapor PPh Unifikasi GRD — Setiap tgl 10</div>
+        <div class="task-badge badge-monthly">Tgl 10</div>
+      </div>
+      <div class="task-item">
+        <div class="task-num" style="background:rgba(124,58,237,0.1);color:#a78bfa">3–6</div>
+        <div class="task-text">Konsolidasi PPh Unifikasi & PPh 21 RDTN+GRD → Submit SPT → Tarik data → Update Excel → Kirim ke Pak Widana</div>
+        <div class="task-badge badge-monthly">Tgl 4</div>
+      </div>
+      <div class="task-item">
+        <div class="task-num" style="background:rgba(124,58,237,0.1);color:#a78bfa">7–8</div>
+        <div class="task-text">Tarik data Penjualan, Pembelian, PKP & NPKP UDN dari ERP — 38 Cabang</div>
+        <div class="task-badge badge-monthly">Tgl 10</div>
+      </div>
+      <div class="task-item">
+        <div class="task-num" style="background:rgba(124,58,237,0.1);color:#a78bfa">9–10</div>
+        <div class="task-text">Konsolidasi Simulasi PPN RDTN & GRD — Submit SPT PPN → Tarik A2, B2, B1, B3 → Kirim ke Pak Widana</div>
+        <div class="task-badge badge-monthly">Tgl 20</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Yearly Tasks -->
+  <div class="task-card" style="margin-bottom: 24px; animation: fadeUp 0.6s 0.35s ease both;">
+    <h3>Tugas Tahunan & Tambahan</h3>
+    <div class="task-sub">REKONSILIASI, BUKU BESAR & PENGEMBANGAN SOFTWARE</div>
+    <div class="yearly-grid">
+      <div>
+        <div class="task-item">
+          <div class="task-num" style="background:rgba(245,158,11,0.1);color:var(--gold)">1–2</div>
+          <div class="task-text">Menyiapkan data Taxation (PPn, PPh21, PPh23, PPh 4(2)) RDTN & GRD → Kirim ke Pak Widana</div>
+          <div class="task-badge badge-yearly">Jan</div>
+        </div>
+        <div class="task-item">
+          <div class="task-num" style="background:rgba(245,158,11,0.1);color:var(--gold)">3</div>
+          <div class="task-text">Tarik data Buku Besar UDN dari GL App → Zip all cabang → Kirim ke Pak Widana</div>
+          <div class="task-badge badge-yearly">Sesuai</div>
+        </div>
+        <div class="task-item">
+          <div class="task-num" style="background:rgba(245,158,11,0.1);color:var(--gold)">4–8</div>
+          <div class="task-text">Rekonsiliasi data FA Acc & Pajak: UDN, SNB, GRD, RDTN, Rama Putera → SPT Badan Tahunan</div>
+          <div class="task-badge badge-yearly">Sesuai</div>
+        </div>
+      </div>
+      <div>
+        <div class="task-item">
+          <div class="task-num" style="background:rgba(245,158,11,0.1);color:var(--gold)">9–12</div>
+          <div class="task-text">Memisahkan Buku Besar per Akun: UDN, USI, RPD, RI — ±3000 Akun per perusahaan</div>
+          <div class="task-badge badge-yearly">3K Akun</div>
+        </div>
+        <div class="task-item">
+          <div class="task-num" style="background:rgba(16,185,129,0.1);color:var(--accent4)">💡</div>
+          <div class="task-text">Pengembangan Software: Converter XML Coretax (RDTN, UDN, USI, SNB) & PDF Faktur Pajak ke Excel</div>
+          <div class="task-badge" style="background:rgba(16,185,129,0.1);color:var(--accent4);border:1px solid rgba(16,185,129,0.25)">Dev</div>
+        </div>
+        <div class="task-item">
+          <div class="task-num" style="background:rgba(16,185,129,0.1);color:var(--accent4)">+</div>
+          <div class="task-text">Konsolidasi Penjualan & Pajak, Return Pajak Masukan RDTN & GRD via Coretax</div>
+          <div class="task-badge" style="background:rgba(16,185,129,0.1);color:var(--accent4);border:1px solid rgba(16,185,129,0.25)">Kondisional</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROGRESS / WORKLOAD DISTRIBUTION -->
+  <div class="section-label">Distribusi Beban Kerja per Jenis Tugas</div>
+  <div class="progress-card">
+    <h3>Volume & Kompleksitas Pekerjaan</h3>
+    <div class="pc-sub">ESTIMASI BERDASARKAN FREKUENSI DAN KOMPLEKSITAS TUGAS</div>
+
+    <div class="prog-row">
+      <div class="prog-label">Faktur Pajak RDTN (Harian ~20/hari)</div>
+      <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:92%;background:linear-gradient(90deg,#00d4ff,#0ea5e9)" data-w="92"></div></div>
+      <div class="prog-val">~300 / bln</div>
+    </div>
+    <div class="prog-row">
+      <div class="prog-label">Faktur Pajak GRD (Harian ~1/hari)</div>
+      <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:12%;background:linear-gradient(90deg,#ff6b35,#f97316)" data-w="12"></div></div>
+      <div class="prog-val">~20 / bln</div>
+    </div>
+    <div class="prog-row">
+      <div class="prog-label">Pelaporan PPh Unifikasi + PPN</div>
+      <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:70%;background:linear-gradient(90deg,#7c3aed,#8b5cf6)" data-w="70"></div></div>
+      <div class="prog-val">10 task/bln</div>
+    </div>
+    <div class="prog-row">
+      <div class="prog-label">Penarikan Data UDN (38 Cabang)</div>
+      <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:60%;background:linear-gradient(90deg,#10b981,#34d399)" data-w="60"></div></div>
+      <div class="prog-val">2 task/bln</div>
+    </div>
+    <div class="prog-row">
+      <div class="prog-label">Rekonsiliasi Tahunan (5 Entitas)</div>
+      <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:85%;background:linear-gradient(90deg,#f59e0b,#fbbf24)" data-w="85"></div></div>
+      <div class="prog-val">5 entitas</div>
+    </div>
+    <div class="prog-row">
+      <div class="prog-label">Pemisahan Buku Besar per Akun</div>
+      <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:78%;background:linear-gradient(90deg,#ec4899,#f472b6)" data-w="78"></div></div>
+      <div class="prog-val">~3000 akun</div>
+    </div>
+    <div class="prog-row">
+      <div class="prog-label">Pengembangan Software Pajak</div>
+      <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:45%;background:linear-gradient(90deg,#14b8a6,#2dd4bf)" data-w="45"></div></div>
+      <div class="prog-val">Ongoing</div>
+    </div>
+  </div>
+
+  <!-- BOTTOM STATS -->
+  <div class="section-label">Statistik Operasional</div>
+  <div class="stats-row">
+    <div class="stat-mini">
+      <div class="icon-box" style="background:rgba(0,212,255,0.1)">📄</div>
+      <div>
+        <div class="sm-label">Faktur/Bulan</div>
+        <div class="sm-value" style="color:var(--accent)">~320</div>
+      </div>
+    </div>
+    <div class="stat-mini">
+      <div class="icon-box" style="background:rgba(124,58,237,0.1)">🗓️</div>
+      <div>
+        <div class="sm-label">Deadline Bulanan</div>
+        <div class="sm-value" style="color:#a78bfa">10+ Task</div>
+      </div>
+    </div>
+    <div class="stat-mini">
+      <div class="icon-box" style="background:rgba(124,58,237,0.15)">🏢</div>
+      <div>
+        <div class="sm-label">Cabang UDN</div>
+        <div class="sm-value" style="color:#a78bfa">38</div>
+      </div>
+    </div>
+    <div class="stat-mini">
+      <div class="icon-box" style="background:rgba(245,158,11,0.1)">📒</div>
+      <div>
+        <div class="sm-label">Akun Buku Besar</div>
+        <div class="sm-value" style="color:var(--gold)">~3000</div>
+      </div>
+    </div>
+    <div class="stat-mini">
+      <div class="icon-box" style="background:rgba(16,185,129,0.1)">⚙️</div>
+      <div>
+        <div class="sm-label">Software Dev</div>
+        <div class="sm-value" style="color:var(--accent4)">4 Tools</div>
+      </div>
+    </div>
+    <div class="stat-mini">
+      <div class="icon-box" style="background:rgba(255,107,53,0.1)">📅</div>
+      <div>
+        <div class="sm-label">Pengalaman</div>
+        <div class="sm-value" style="color:var(--accent2)">3 Tahun</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="f-left">TAX DASHBOARD · UDN GROUP JAKARTA · 2026 · Data: Portofolio RDTN 2025</div>
+    <div class="f-right">Muhamad Irpan Yasin · Bagian Pajak · Update: Feb 2026</div>
+  </footer>
+
+</div>
+
+<script>
+// ============= DATA (updated from source docs) =============
+// PPN: Lebih Bayar per bulan (dari spreadsheet PPN Jan-Des 2025)
+const months = ['Jan','Feb','Feb P1','Feb P2','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const ppn    = [406978305,298535425,298893102,299440284,246443127,199872986,389384070,185578494,157385233,49793928,128483947,603433963,496353375,2431063749];
+
+// PPH-21: PJK dari SPT Masa (per baris di spreadsheet, 12 bulan utama)
+const pph21  = [16677698,8738113,0,0,25668612,890819,6526074,10514110,12403125,12324838,13992919,13673234,14685918,4561621];
+
+// PPH-23: PJK dari Outcome Tax PPh 23 Jan-Des 2024 (12 bulan)
+// Note: data ini adalah periode Jan-Des 2024
+const pph23  = [2169527,3603450,6028455,8305634,9597478,5679896,8370953,8427480,707275,26995585,31532701,20923552,0,0];
+
+// PPH 4(2): dari Income Tax 4-2 Jan-Des 2025
+// Jun=535266, Jul=84000, Oct=475000, Dec=280000000
+const pph42  = [0,0,0,0,0,0,0,535266,84000,0,0,475000,0,280000000];
+
+const total  = ppn.map((v,i) => v + pph21[i] + pph23[i] + pph42[i]);
+
+const fmt = v => 'Rp ' + (v >= 1e9 ? (v/1e9).toFixed(2)+'M' : v >= 1e6 ? (v/1e6).toFixed(1)+'Jt' : (v/1e3).toFixed(0)+'Rb');
+
+Chart.defaults.color = '#64748b';
+Chart.defaults.font.family = "'DM Mono', monospace";
+Chart.defaults.font.size = 10;
+
+// ============= PPN LINE CHART =============
+new Chart(document.getElementById('ppnChart'), {
+  type: 'line',
+  data: {
+    labels: months,
+    datasets: [{
+      label: 'PPN Lebih Bayar',
+      data: ppn,
+      borderColor: '#00d4ff',
+      backgroundColor: 'rgba(0,212,255,0.07)',
+      borderWidth: 2,
+      pointBackgroundColor: '#00d4ff',
+      pointRadius: 4,
+      pointHoverRadius: 7,
+      tension: 0.4,
+      fill: true
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#111827',
+        borderColor: '#1e2d47',
+        borderWidth: 1,
+        callbacks: { label: ctx => fmt(ctx.raw) }
+      }
+    },
+    scales: {
+      x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { font: { size: 8 }, maxRotation: 45 } },
+      y: {
+        grid: { color: 'rgba(255,255,255,0.04)' },
+        ticks: { callback: v => v >= 1e9 ? (v/1e9).toFixed(1)+'B' : v >= 1e6 ? (v/1e6).toFixed(0)+'M' : v, font: { size: 9 } }
+      }
+    }
+  }
+});
+
+// ============= DONUT CHART =============
+const totalPPN  = ppn.reduce((a,b)=>a+b,0);
+const totalPPH21 = pph21.reduce((a,b)=>a+b,0);
+const totalPPH23 = pph23.reduce((a,b)=>a+b,0);
+const totalPPH42 = pph42.reduce((a,b)=>a+b,0);
+
+new Chart(document.getElementById('donutChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['PPN','PPH-21','PPH-23','PPH 4(2)'],
+    datasets: [{
+      data: [totalPPN, totalPPH21, totalPPH23, totalPPH42],
+      backgroundColor: ['rgba(0,212,255,0.8)','rgba(255,107,53,0.8)','rgba(16,185,129,0.8)','rgba(245,158,11,0.8)'],
+      borderColor: '#0a0e17',
+      borderWidth: 3,
+      hoverOffset: 8
+    }]
+  },
+  options: {
+    cutout: '70%',
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: { padding: 12, boxWidth: 12, font: { size: 9 } }
+      },
+      tooltip: {
+        backgroundColor: '#111827',
+        borderColor: '#1e2d47',
+        borderWidth: 1,
+        callbacks: {
+          label: ctx => {
+            const sum = ctx.dataset.data.reduce((a,b)=>a+b,0);
+            const pct = ((ctx.raw/sum)*100).toFixed(1);
+            return ` ${fmt(ctx.raw)} (${pct}%)`;
+          }
+        }
+      }
+    }
+  }
+});
+
+// ============= TOTAL BAR CHART =============
+new Chart(document.getElementById('totalChart'), {
+  type: 'bar',
+  data: {
+    labels: months,
+    datasets: [{
+      label: 'Total Pajak',
+      data: total,
+      backgroundColor: total.map(v => v > 1e9 ? 'rgba(255,107,53,0.85)' : 'rgba(124,58,237,0.65)'),
+      borderColor: total.map(v => v > 1e9 ? '#ff6b35' : '#7c3aed'),
+      borderWidth: 1,
+      borderRadius: 3
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#111827',
+        borderColor: '#1e2d47',
+        borderWidth: 1,
+        callbacks: { label: ctx => fmt(ctx.raw) }
+      }
+    },
+    scales: {
+      x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { font: { size: 8 }, maxRotation: 45 } },
+      y: {
+        grid: { color: 'rgba(255,255,255,0.04)' },
+        ticks: { callback: v => v >= 1e9 ? (v/1e9).toFixed(1)+'B' : v >= 1e6 ? (v/1e6).toFixed(0)+'M' : v, font: { size: 9 } }
+      }
+    }
+  }
+});
+
+// ============= PPH COMPARISON BAR =============
+// 12 bulan utama (tanpa Feb P1/P2)
+const pphMonths = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const pph21f = [16677698,8738113,25668612,890819,6526074,10514110,12403125,12324838,13992919,13673234,14685918,4561621];
+// PPH-23 from Outcome Tax data (Jan-Des 2024)
+const pph23f = [2169527,3603450,6028455,8305634,9597478,5679896,8370953,8427480,707275,26995585,31532701,20923552];
+// PPH 4(2) from Income Tax 4-2 data
+const pph42f = [0,0,0,0,0,535266,84000,0,0,475000,0,280000000];
+
+new Chart(document.getElementById('pphChart'), {
+  type: 'bar',
+  data: {
+    labels: pphMonths,
+    datasets: [
+      {
+        label: 'PPH-21',
+        data: pph21f,
+        backgroundColor: 'rgba(255,107,53,0.75)',
+        borderColor: '#ff6b35',
+        borderWidth: 1,
+        borderRadius: 2
+      },
+      {
+        label: 'PPH-23',
+        data: pph23f,
+        backgroundColor: 'rgba(16,185,129,0.75)',
+        borderColor: '#10b981',
+        borderWidth: 1,
+        borderRadius: 2
+      },
+      {
+        label: 'PPH 4(2)',
+        data: pph42f,
+        backgroundColor: 'rgba(245,158,11,0.75)',
+        borderColor: '#f59e0b',
+        borderWidth: 1,
+        borderRadius: 2
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: { padding: 10, boxWidth: 12, font: { size: 9 } }
+      },
+      tooltip: {
+        backgroundColor: '#111827',
+        borderColor: '#1e2d47',
+        borderWidth: 1,
+        callbacks: { label: ctx => ` ${ctx.dataset.label}: ${fmt(ctx.raw)}` }
+      }
+    },
+    scales: {
+      x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { font: { size: 8 }, maxRotation: 45 }, stacked: false },
+      y: {
+        grid: { color: 'rgba(255,255,255,0.04)' },
+        ticks: { callback: v => v >= 1e6 ? (v/1e6).toFixed(0)+'M' : v, font: { size: 9 } }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
