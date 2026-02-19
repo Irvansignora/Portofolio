@@ -760,7 +760,7 @@ export default function Home() {
                 </div>
                 <div className="portfolio-content" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                   <span className="portfolio-tag">Finance Tool</span>
-                  <h3 className="portfolio-title">MonFlow V2</h3>
+                  <h3 className="portfolio-title">Finance Manager</h3>
                   <p className="portfolio-description" style={{ flex: 1 }}>
                     A smart personal finance manager — track income, expenses, and cash flow in real-time.
                     Built for clarity, speed, and everyday use.
