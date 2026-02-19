@@ -826,7 +826,7 @@ export default function Home() {
                 </div>
                 <div className="portfolio-content" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                   <span className="portfolio-tag">School Website</span>
-                  <h3 className="portfolio-title">Web Sekolah PAUD Fajar Pagi</h3>
+                  <h3 className="portfolio-title">School Website PAUD Fajar Pagi</h3>
                   <p className="portfolio-description" style={{ flex: 1 }}>
                     A clean, welcoming website for an early childhood school. Built to help parents
                     learn about the school, its programs, and how to enroll their little ones.
