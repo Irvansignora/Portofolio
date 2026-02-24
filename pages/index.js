@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 
 const portfolioData = [
   {
@@ -243,23 +244,12 @@ export default function Home() {
       return { src, title, caption: '' }
     })
     setLightbox({ open: true, images: normalized, index, title })
-    const scrollY = window.scrollY
     document.body.style.overflow = 'hidden'
-    document.body.style.top = `-${scrollY}px`
-    document.body.style.width = '100%'
-    document.body.dataset.scrollY = scrollY
-    document.body.classList.add('lightbox-open')
   }
   
   const closeLightbox = () => {
-    const scrollY = parseInt(document.body.dataset.scrollY || '0')
-    document.body.style.overflow = ''
-    document.body.style.top = ''
-    document.body.style.width = ''
-    delete document.body.dataset.scrollY
-    document.body.classList.remove('lightbox-open')
     setLightbox(l => ({ ...l, open: false }))
-    window.scrollTo({ top: scrollY, behavior: 'instant' })
+    document.body.style.overflow = ''
   }
 
   const changeImage = (dir) => {
@@ -488,40 +478,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Lightbox Portfolio */}
-          {lightbox.open && (() => {
-            const current = lightbox.images[lightbox.index]
-            const src = typeof current === 'object' ? current.src : current
-            const slideTitle = typeof current === 'object' ? current.title : lightbox.title
-            const slideCaption = typeof current === 'object' ? current.caption : ''
-            return (
-              <div className="lightbox active" onClick={(e) => { if (e.target.classList.contains('lightbox')) closeLightbox() }}>
-                <div className="lightbox-close" onClick={closeLightbox}>×</div>
-                <div className="lightbox-content">
-                  <div className="lightbox-image-wrapper">
-                    <div className="lightbox-nav lightbox-prev" onClick={() => changeImage(-1)}>‹</div>
-                    <img className="lightbox-image" src={src} alt={slideTitle} />
-                    <div className="lightbox-nav lightbox-next" onClick={() => changeImage(1)}>›</div>
-                  </div>
-                  <div className="lightbox-counter">{lightbox.index + 1} / {lightbox.images.length}</div>
-                  <div className="lightbox-slide-info">
-                    <div className="lightbox-slide-title">{slideTitle}</div>
-                    {slideCaption && <div className="lightbox-slide-caption">{slideCaption}</div>}
-                  </div>
-                  {/* Dot indicators */}
-                  <div className="lightbox-dots">
-                    {lightbox.images.map((_, i) => (
-                      <span
-                        key={i}
-                        className={`lightbox-dot ${i === lightbox.index ? 'active' : ''}`}
-                        onClick={() => setLightbox(l => ({ ...l, index: i }))}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )
-          })()}
         </section>
       )}
       {activePage === 'skills' && (
@@ -586,39 +542,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Lightbox */}
-          {lightbox.open && (() => {
-            const current = lightbox.images[lightbox.index]
-            const src = typeof current === 'object' ? current.src : current
-            const slideTitle = typeof current === 'object' ? current.title : lightbox.title
-            const slideCaption = typeof current === 'object' ? current.caption : ''
-            return (
-              <div className="lightbox active" onClick={(e) => { if (e.target.classList.contains('lightbox')) closeLightbox() }}>
-                <div className="lightbox-close" onClick={closeLightbox}>×</div>
-                <div className="lightbox-content">
-                  <div className="lightbox-image-wrapper">
-                    <div className="lightbox-nav lightbox-prev" onClick={() => changeImage(-1)}>‹</div>
-                    <img className="lightbox-image" src={src} alt={slideTitle} />
-                    <div className="lightbox-nav lightbox-next" onClick={() => changeImage(1)}>›</div>
-                  </div>
-                  <div className="lightbox-counter">{lightbox.index + 1} / {lightbox.images.length}</div>
-                  <div className="lightbox-slide-info">
-                    <div className="lightbox-slide-title">{slideTitle}</div>
-                    {slideCaption && <div className="lightbox-slide-caption">{slideCaption}</div>}
-                  </div>
-                  <div className="lightbox-dots">
-                    {lightbox.images.map((_, i) => (
-                      <span
-                        key={i}
-                        className={`lightbox-dot ${i === lightbox.index ? 'active' : ''}`}
-                        onClick={() => setLightbox(l => ({ ...l, index: i }))}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )
-          })()}
         </section>
       )}
 
@@ -703,6 +626,104 @@ export default function Home() {
           <p style={{ marginTop: '0.5rem', fontSize: '0.82rem', opacity: 0.6 }}>Crafted with precision and professionalism</p>
         </div>
       </footer>
+
+      {/* ===== LIGHTBOX PORTAL — rendered langsung ke document.body ===== */}
+      {lightbox.open && typeof document !== 'undefined' && createPortal(
+        (() => {
+          const current = lightbox.images[lightbox.index]
+          const src = typeof current === 'object' ? current.src : current
+          const slideTitle = typeof current === 'object' ? current.title : lightbox.title
+          const slideCaption = typeof current === 'object' ? current.caption : ''
+          return (
+            <div
+              style={{
+                position: 'fixed', inset: 0, zIndex: 99999,
+                background: 'rgba(0,0,0,0.96)',
+                display: 'flex', flexDirection: 'column',
+                alignItems: 'center', justifyContent: 'center',
+              }}
+              onClick={(e) => { if (e.currentTarget === e.target) closeLightbox() }}
+            >
+              {/* Close button */}
+              <div
+                onClick={closeLightbox}
+                style={{
+                  position: 'fixed', top: '20px', right: '30px',
+                  width: '50px', height: '50px', zIndex: 100000,
+                  background: 'rgba(255,0,234,0.2)',
+                  border: '2px solid #ff00ea', borderRadius: '50%',
+                  color: '#ff00ea', fontSize: '2rem', fontWeight: 'bold',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  cursor: 'none', transition: 'all 0.3s',
+                }}
+              >×</div>
+
+              {/* Image + nav */}
+              <div style={{ position: 'relative', width: '100%', maxWidth: '1000px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 80px' }}>
+                <div
+                  onClick={() => changeImage(-1)}
+                  style={{
+                    position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)',
+                    width: '54px', height: '54px', background: 'rgba(0,240,255,0.18)',
+                    border: '2px solid #00f0ff', borderRadius: '50%', color: '#00f0ff',
+                    fontSize: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    cursor: 'none', zIndex: 100000,
+                  }}
+                >‹</div>
+                <img
+                  src={src} alt={slideTitle}
+                  style={{
+                    maxWidth: '100%', maxHeight: '70vh', width: 'auto', height: 'auto',
+                    objectFit: 'contain', borderRadius: '12px',
+                    border: '3px solid rgba(0,240,255,0.45)',
+                    boxShadow: '0 0 80px rgba(0,240,255,0.35)',
+                    display: 'block',
+                  }}
+                />
+                <div
+                  onClick={() => changeImage(1)}
+                  style={{
+                    position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)',
+                    width: '54px', height: '54px', background: 'rgba(0,240,255,0.18)',
+                    border: '2px solid #00f0ff', borderRadius: '50%', color: '#00f0ff',
+                    fontSize: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    cursor: 'none', zIndex: 100000,
+                  }}
+                >›</div>
+              </div>
+
+              {/* Counter */}
+              <div style={{ marginTop: '0.8rem', color: 'rgba(0,240,255,0.6)', fontSize: '0.78rem', letterSpacing: '0.12em', fontFamily: 'Orbitron, sans-serif' }}>
+                {lightbox.index + 1} / {lightbox.images.length}
+              </div>
+
+              {/* Title & caption */}
+              <div style={{ marginTop: '0.6rem', textAlign: 'center', padding: '0 1rem' }}>
+                <div style={{ color: '#00f0ff', fontFamily: 'Orbitron, sans-serif', fontSize: '1rem', fontWeight: 700, marginBottom: '0.3rem' }}>{slideTitle}</div>
+                {slideCaption && <div style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.88rem', fontStyle: 'italic' }}>{slideCaption}</div>}
+              </div>
+
+              {/* Dots */}
+              <div style={{ display: 'flex', gap: '10px', marginTop: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+                {lightbox.images.map((_, i) => (
+                  <span
+                    key={i}
+                    onClick={() => setLightbox(l => ({ ...l, index: i }))}
+                    style={{
+                      width: '10px', height: '10px', borderRadius: '50%', cursor: 'none',
+                      background: i === lightbox.index ? '#00f0ff' : 'rgba(255,255,255,0.25)',
+                      boxShadow: i === lightbox.index ? '0 0 10px rgba(0,240,255,0.7)' : 'none',
+                      transform: i === lightbox.index ? 'scale(1.4)' : 'scale(1)',
+                      transition: 'all 0.3s', display: 'inline-block', flexShrink: 0,
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+          )
+        })(),
+        document.body
+      )}
     </>
   )
 }
