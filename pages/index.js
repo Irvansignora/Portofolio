@@ -40,11 +40,11 @@ const portfolioData = [
     id: 'portfolio-4',
     tag: 'Web Development',
     title: 'Project Development',
-    description: 'A collection of real-world web applications built from scratch — from finance tools to school websites and personal portfolios. Each project is live, deployed, and crafted with care.',
-    tech: ['Next.js', 'React', 'Firebase', 'Vercel'],
+    description: 'A modern web application project that has been developed and deployed live. Built with robust architecture for optimal performance and user experience.',
+    tech: ['Web App', 'Development', 'Firebase'],
     img: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=500&fit=crop&q=80',
-    alt: 'Project Development',
-    liveUrl: 'projects-page',
+    alt: 'MonFlow V2',
+    liveUrl: 'https://monflow-v2.web.app/',
     noGallery: true,
   },
   {
@@ -60,10 +60,10 @@ const portfolioData = [
     images: [
       { src: 'nihongo.jpg', title: 'Japanese Language Proficiency', caption: 'JLPT Certification — Basic Japanese proficiency for daily conversation' },
       { src: 'deutsch.jpg', title: 'German Language Certificate', caption: 'Deutsch Zertifikat — Elementary German language competency' },
-      { src: 'hlc-1.jpg', title: 'HLC Award 1', caption: 'Recognition of excellence and outstanding contribution' },
+      { src: 'hlc1.jpg', title: 'HLC Award 1', caption: 'Recognition of excellence and outstanding contribution' },
       { src: 'hlc-2.jpg', title: 'HLC Award 2', caption: 'Recognition of excellence and outstanding contribution' },
-      { src: 'ms-excel-1.jpg', title: 'Microsoft Excel Certification', caption: 'Advanced spreadsheet & data analysis proficiency' },
-      { src: 'ms-Excel-2.jpg', title: 'Microsoft Excel — Advanced', caption: 'Expert-level Excel skills for financial reporting' },
+      { src: 'msexcel1.jpg', title: 'Microsoft Excel Certification', caption: 'Advanced spreadsheet & data analysis proficiency' },
+      { src: 'msExcel2.jpg', title: 'Microsoft Excel — Advanced', caption: 'Expert-level Excel skills for financial reporting' },
     ],
   },
   {
@@ -244,11 +244,18 @@ export default function Home() {
     })
     setLightbox({ open: true, images: normalized, index, title })
     document.body.style.overflow = 'hidden'
+    document.body.style.height = '100vh'
+    document.documentElement.style.overflow = 'hidden'
+    document.body.classList.add('lightbox-open')
+    window.scrollTo({ top: 0, behavior: 'instant' })
   }
   
   const closeLightbox = () => {
     setLightbox(l => ({ ...l, open: false }))
-    document.body.style.overflow = 'auto'
+    document.body.style.overflow = ''
+    document.body.style.height = ''
+    document.documentElement.style.overflow = ''
+    document.body.classList.remove('lightbox-open')
   }
 
   const changeImage = (dir) => {
@@ -450,17 +457,9 @@ export default function Home() {
                     <div className="portfolio-overlay">
                       {/* Live button — hanya jika ada liveUrl */}
                       {item.liveUrl && (
-                        item.liveUrl === 'projects-page'
-                          ? (
-                            <a href="#" className="view-btn" style={{ marginBottom: item.images ? '0.7rem' : '0' }}
-                              onClick={(e) => { e.preventDefault(); navigate('projects') }}>
-                              <span>🚀</span> View Projects
-                            </a>
-                          ) : (
-                            <a href={item.liveUrl} className="view-btn" style={{ marginBottom: item.images ? '0.7rem' : '0' }} target="_blank" rel="noopener">
-                              <span>🚀</span> View Live
-                            </a>
-                          )
+                        <a href={item.liveUrl} className="view-btn" style={{ marginBottom: item.images ? '0.7rem' : '0' }} target="_blank" rel="noopener">
+                          <span>🚀</span> View Live
+                        </a>
                       )}
                       {/* Gallery / Certificate button — hanya jika ada images */}
                       {item.images && (
@@ -688,219 +687,6 @@ export default function Home() {
                 </form>
               </div>
             </div>
-          </div>
-        </section>
-      )}
-
-      {/* ===== PROJECTS PAGE ===== */}
-      {activePage === 'projects' && (
-        <section className="section page-section active" id="projects" style={{ minHeight: '100vh', paddingBottom: '80px' }}>
-          <div className="container">
-
-            {/* Back button */}
-            <div style={{ marginBottom: '2rem' }}>
-              <button
-                onClick={() => navigate('portfolio')}
-                onMouseEnter={addHover} onMouseLeave={removeHover}
-                style={{
-                  background: 'transparent',
-                  border: '1px solid rgba(0,255,136,0.35)',
-                  color: 'var(--neon-cyan)',
-                  padding: '0.5rem 1.2rem',
-                  borderRadius: '6px',
-                  cursor: 'none',
-                  fontSize: '0.85rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  fontFamily: 'inherit',
-                  transition: 'all 0.2s',
-                }}
-              >
-                ← Back to Portfolio
-              </button>
-            </div>
-
-            {/* Header */}
-            <div className="section-header" style={{ marginBottom: '3rem' }}>
-              <span className="section-label">Live & Deployed</span>
-              <h2 className="section-title">Project Development</h2>
-              <p className="section-description" style={{ maxWidth: '600px', margin: '0 auto' }}>
-                Real-world web applications — designed, built, and shipped. Each project solves a
-                real problem, from managing your money to planning a holy month or showcasing someone's story online.
-              </p>
-            </div>
-
-            {/* Projects Grid */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-              gap: '2rem',
-            }}>
-
-              {/* MonFlow V2 */}
-              <div className="portfolio-card fade-in" onMouseEnter={addHover} onMouseLeave={removeHover}
-                style={{ display: 'flex', flexDirection: 'column' }}>
-                <div className="portfolio-image" style={{ position: 'relative' }}>
-                  <img
-                    src="https://images.unsplash.com/photo-1633158829585-23ba8f7c8caf?w=800&h=500&fit=crop&q=80"
-                    alt="MonFlow V2" loading="lazy"
-                  />
-                  <div className="portfolio-overlay">
-                    <a href="https://monflow-v2.web.app/" className="view-btn" target="_blank" rel="noopener">
-                      <span>🚀</span> View Live
-                    </a>
-                  </div>
-                  <div style={{
-                    position: 'absolute', top: '12px', left: '12px',
-                    background: 'linear-gradient(135deg, #00ff88, #00cc66)',
-                    color: '#0a0e17', fontSize: '0.7rem', fontWeight: 700,
-                    padding: '3px 10px', borderRadius: '20px', letterSpacing: '0.05em'
-                  }}>💰 Finance</div>
-                </div>
-                <div className="portfolio-content" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                  <span className="portfolio-tag">Finance Tool</span>
-                  <h3 className="portfolio-title">Finance Manager</h3>
-                  <p className="portfolio-description" style={{ flex: 1 }}>
-                    A smart personal finance manager — track income, expenses, and cash flow in real-time.
-                    Built for clarity, speed, and everyday use.
-                  </p>
-                  <div className="portfolio-tech">
-                    {['Firebase', 'React', 'Realtime DB'].map(t => <span key={t} className="tech-badge">{t}</span>)}
-                  </div>
-                </div>
-              </div>
-
-              {/* Ramadhan Planner */}
-              <div className="portfolio-card fade-in" onMouseEnter={addHover} onMouseLeave={removeHover}
-                style={{ display: 'flex', flexDirection: 'column' }}>
-                <div className="portfolio-image" style={{ position: 'relative' }}>
-                  <img
-                    src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=500&fit=crop&q=80"
-                    alt="Ramadhan Planner" loading="lazy"
-                  />
-                  <div className="portfolio-overlay">
-                    <a href="https://ramadhan-planner2.vercel.app/" className="view-btn" target="_blank" rel="noopener">
-                      <span>🚀</span> View Live
-                    </a>
-                  </div>
-                  <div style={{
-                    position: 'absolute', top: '12px', left: '12px',
-                    background: 'linear-gradient(135deg, #a78bfa, #7c3aed)',
-                    color: '#fff', fontSize: '0.7rem', fontWeight: 700,
-                    padding: '3px 10px', borderRadius: '20px', letterSpacing: '0.05em'
-                  }}>🌙 Lifestyle</div>
-                </div>
-                <div className="portfolio-content" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                  <span className="portfolio-tag">Lifestyle App</span>
-                  <h3 className="portfolio-title">Ramadhan Planner</h3>
-                  <p className="portfolio-description" style={{ flex: 1 }}>
-                    Plan your most meaningful month with purpose. Track ibadah, set daily goals,
-                    and stay consistent throughout Ramadhan — all in one beautiful app.
-                  </p>
-                  <div className="portfolio-tech">
-                    {['Next.js', 'Vercel', 'LocalStorage'].map(t => <span key={t} className="tech-badge">{t}</span>)}
-                  </div>
-                </div>
-              </div>
-
-              {/* Web Sekolah PAUD */}
-              <div className="portfolio-card fade-in" onMouseEnter={addHover} onMouseLeave={removeHover}
-                style={{ display: 'flex', flexDirection: 'column' }}>
-                <div className="portfolio-image" style={{ position: 'relative' }}>
-                  <img
-                    src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&h=500&fit=crop&q=80"
-                    alt="Web Sekolah PAUD" loading="lazy"
-                  />
-                  <div className="portfolio-overlay">
-                    <a href="https://paud-fajar-pagi.vercel.app/" className="view-btn" target="_blank" rel="noopener">
-                      <span>🚀</span> View Live
-                    </a>
-                  </div>
-                  <div style={{
-                    position: 'absolute', top: '12px', left: '12px',
-                    background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-                    color: '#0a0e17', fontSize: '0.7rem', fontWeight: 700,
-                    padding: '3px 10px', borderRadius: '20px', letterSpacing: '0.05em'
-                  }}>🏫 Education</div>
-                </div>
-                <div className="portfolio-content" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                  <span className="portfolio-tag">School Website</span>
-                  <h3 className="portfolio-title">School Website PAUD Fajar Pagi</h3>
-                  <p className="portfolio-description" style={{ flex: 1 }}>
-                    A clean, welcoming website for an early childhood school. Built to help parents
-                    learn about the school, its programs, and how to enroll their little ones.
-                  </p>
-                  <div className="portfolio-tech">
-                    {['Next.js', 'Tailwind', 'Vercel'].map(t => <span key={t} className="tech-badge">{t}</span>)}
-                  </div>
-                </div>
-              </div>
-
-              {/* Portfolio M. Nazar */}
-              <div className="portfolio-card fade-in" onMouseEnter={addHover} onMouseLeave={removeHover}
-                style={{ display: 'flex', flexDirection: 'column' }}>
-                <div className="portfolio-image" style={{ position: 'relative' }}>
-                  <img
-                    src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=800&h=500&fit=crop&q=80"
-                    alt="Portfolio M Nazar" loading="lazy"
-                  />
-                  <div className="portfolio-overlay" style={{ gap: '0.6rem' }}>
-                    <a href="https://m-nazar.vercel.app/" className="view-btn" target="_blank" rel="noopener">
-                      <span>🚀</span> Nazar Portfolio
-                    </a>
-                    <a href="https://portofolio-anisa.vercel.app/" className="view-btn" target="_blank" rel="noopener">
-                      <span>✨</span> Anisa Portfolio
-                    </a>
-                  </div>
-                  <div style={{
-                    position: 'absolute', top: '12px', left: '12px',
-                    background: 'linear-gradient(135deg, #00d4ff, #0ea5e9)',
-                    color: '#0a0e17', fontSize: '0.7rem', fontWeight: 700,
-                    padding: '3px 10px', borderRadius: '20px', letterSpacing: '0.05em'
-                  }}>🎨 Portfolio</div>
-                </div>
-                <div className="portfolio-content" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                  <span className="portfolio-tag">Personal Portfolio</span>
-                  <h3 className="portfolio-title">Portfolio Sites</h3>
-                  <p className="portfolio-description" style={{ flex: 1 }}>
-                    Custom-built portfolio websites for real clients — designed to make strong first impressions,
-                    showcase their skills, and open doors to new opportunities.
-                  </p>
-                  <div className="portfolio-tech">
-                    {['Next.js', 'CSS', 'Vercel', 'Custom Design'].map(t => <span key={t} className="tech-badge">{t}</span>)}
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
-            {/* Bottom CTA */}
-            <div style={{
-              marginTop: '4rem', textAlign: 'center',
-              padding: '2.5rem 2rem',
-              background: 'rgba(0,255,136,0.04)',
-              border: '1px solid rgba(0,255,136,0.12)',
-              borderRadius: '12px',
-            }}>
-              <div style={{ fontSize: '2rem', marginBottom: '0.8rem' }}>⚡</div>
-              <h3 style={{ fontFamily: 'inherit', fontSize: '1.2rem', color: '#fff', marginBottom: '0.6rem' }}>
-                Got a project in mind?
-              </h3>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1.5rem', maxWidth: '420px', margin: '0 auto 1.5rem' }}>
-                Whether it's a web app, a landing page, or something completely new —
-                let's turn your idea into something real.
-              </p>
-              <a
-                href="#contact"
-                className="btn btn-primary"
-                onClick={(e) => { e.preventDefault(); navigate('contact') }}
-                onMouseEnter={addHover} onMouseLeave={removeHover}
-              >
-                Let's Work Together 🚀
-              </a>
-            </div>
-
           </div>
         </section>
       )}
