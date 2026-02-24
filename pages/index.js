@@ -647,6 +647,7 @@ export default function Home() {
               {/* Close button */}
               <div
                 onClick={closeLightbox}
+                onMouseEnter={addHover} onMouseLeave={removeHover}
                 style={{
                   position: 'fixed', top: '20px', right: '30px',
                   width: '50px', height: '50px', zIndex: 100000,
@@ -662,6 +663,7 @@ export default function Home() {
               <div style={{ position: 'relative', width: '100%', maxWidth: '1000px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 80px' }}>
                 <div
                   onClick={() => changeImage(-1)}
+                  onMouseEnter={addHover} onMouseLeave={removeHover}
                   style={{
                     position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)',
                     width: '54px', height: '54px', background: 'rgba(0,240,255,0.18)',
@@ -682,6 +684,7 @@ export default function Home() {
                 />
                 <div
                   onClick={() => changeImage(1)}
+                  onMouseEnter={addHover} onMouseLeave={removeHover}
                   style={{
                     position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)',
                     width: '54px', height: '54px', background: 'rgba(0,240,255,0.18)',
@@ -709,6 +712,7 @@ export default function Home() {
                   <span
                     key={i}
                     onClick={() => setLightbox(l => ({ ...l, index: i }))}
+                    onMouseEnter={addHover} onMouseLeave={removeHover}
                     style={{
                       width: '10px', height: '10px', borderRadius: '50%', cursor: 'none',
                       background: i === lightbox.index ? '#00f0ff' : 'rgba(255,255,255,0.25)',
