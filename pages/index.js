@@ -243,19 +243,23 @@ export default function Home() {
       return { src, title, caption: '' }
     })
     setLightbox({ open: true, images: normalized, index, title })
+    const scrollY = window.scrollY
     document.body.style.overflow = 'hidden'
-    document.body.style.height = '100vh'
-    document.documentElement.style.overflow = 'hidden'
+    document.body.style.top = `-${scrollY}px`
+    document.body.style.width = '100%'
+    document.body.dataset.scrollY = scrollY
     document.body.classList.add('lightbox-open')
-    window.scrollTo({ top: 0, behavior: 'instant' })
   }
   
   const closeLightbox = () => {
-    setLightbox(l => ({ ...l, open: false }))
+    const scrollY = parseInt(document.body.dataset.scrollY || '0')
     document.body.style.overflow = ''
-    document.body.style.height = ''
-    document.documentElement.style.overflow = ''
+    document.body.style.top = ''
+    document.body.style.width = ''
+    delete document.body.dataset.scrollY
     document.body.classList.remove('lightbox-open')
+    setLightbox(l => ({ ...l, open: false }))
+    window.scrollTo({ top: scrollY, behavior: 'instant' })
   }
 
   const changeImage = (dir) => {
