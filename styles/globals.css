@@ -1168,9 +1168,6 @@ footer p { font-size: 0.92rem; letter-spacing: 0.06em; }
 /* Body dikunci saat lightbox aktif */
 body.lightbox-open {
   overflow: hidden !important;
-  height: 100vh !important;
-  position: fixed !important;
-  width: 100%;
 }
 
 .lightbox-close {
