@@ -44,7 +44,7 @@ const portfolioData = [
     description: 'A modern web application project that has been developed and deployed live. Built with robust architecture for optimal performance and user experience.',
     tech: ['Web App', 'Development', 'Firebase'],
     img: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=500&fit=crop&q=80',
-    alt: 'MonFlow V2',
+    alt: 'Finance Manager',
     liveUrl: '#project-page',
     noGallery: true,
   },
@@ -531,13 +531,13 @@ export default function Home() {
               gap: '2rem',
             }}>
 
-              {/* MonFlow V2 */}
+              {/* Finance Manager */}
               <div className="portfolio-card fade-in" onMouseEnter={addHover} onMouseLeave={removeHover}
                 style={{ display: 'flex', flexDirection: 'column' }}>
                 <div className="portfolio-image" style={{ position: 'relative' }}>
                   <img
                     src="https://images.unsplash.com/photo-1633158829585-23ba8f7c8caf?w=800&h=500&fit=crop&q=80"
-                    alt="MonFlow V2" loading="lazy"
+                    alt="Finance Manager" loading="lazy"
                   />
                   <div className="portfolio-overlay">
                     <a href="https://monflow-v2.web.app/" className="view-btn" target="_blank" rel="noopener">
@@ -553,7 +553,7 @@ export default function Home() {
                 </div>
                 <div className="portfolio-content" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                   <span className="portfolio-tag">Finance Tool</span>
-                  <h3 className="portfolio-title">MonFlow V2</h3>
+                  <h3 className="portfolio-title">Finance Manager</h3>
                   <p className="portfolio-description" style={{ flex: 1 }}>
                     A smart personal finance manager — track income, expenses, and cash flow in real-time.
                     Built for clarity, speed, and everyday use.
