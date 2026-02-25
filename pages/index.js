@@ -485,115 +485,282 @@ export default function Home() {
 
         </section>
       )}
-      {/* ===== PROJECT DEVELOPMENT ===== */}
-      {activePage === 'project-dev' && (
-        <section className="section page-section active" id="project-dev">
+      {/* ===== PROJECTS PAGE ===== */}
+      {activePage === 'projects' && (
+        <section className="section page-section active" id="projects" style={{ minHeight: '100vh', paddingBottom: '80px' }}>
           <div className="container">
-            <div className="section-header">
-              <span className="section-label">Live Projects</span>
-              <h2 className="section-title">Project Development</h2>
-              <p className="section-description">
-                From idea to deployment — here are real-world digital products that have been built, shipped, and are running live.
-                Each project reflects a commitment to clean code, thoughtful design, and meaningful user experience.
-              </p>
-            </div>
 
-            <div className="portfolio-grid">
-              {[
-                {
-                  emoji: '💰',
-                  tag: 'Finance App',
-                  title: 'MonFlow V2',
-                  description: 'A smart personal finance manager to track income, expenses, and cash flow — beautifully visualized and intuitively designed for daily use.',
-                  tech: ['Firebase', 'Web App', 'Finance'],
-                  url: 'https://monflow-v2.web.app/',
-                  color: '#00f0ff',
-                },
-                {
-                  emoji: '🌙',
-                  tag: 'Lifestyle App',
-                  title: 'Ramadhan Planner',
-                  description: 'A dedicated Ramadhan companion app to plan ibadah, track sehri & iftar schedules, and make the most out of every blessed day.',
-                  tech: ['Planner', 'Web App', 'Lifestyle'],
-                  url: 'https://ramadhan-planner2.vercel.app/',
-                  color: '#b388ff',
-                },
-                {
-                  emoji: '🏫',
-                  tag: 'Education',
-                  title: 'Website School — PAUD Fajar Pagi',
-                  description: 'A warm and welcoming school website for early childhood education, designed to inform parents and showcase the school\'s learning environment.',
-                  tech: ['Next.js', 'School', 'Education'],
-                  url: 'https://paud-fajar-pagi.vercel.app/',
-                  color: '#ffcc00',
-                },
-                {
-                  emoji: '🧑‍💻',
-                  tag: 'Portfolio',
-                  title: 'Portfolio — M. Nazar',
-                  description: 'A sleek personal portfolio website built to showcase professional experience, projects, and skills with a modern and responsive layout.',
-                  tech: ['Portfolio', 'Next.js', 'UI/UX'],
-                  url: 'https://m-nazar.vercel.app/',
-                  color: '#00ff88',
-                },
-                {
-                  emoji: '👩‍💼',
-                  tag: 'Portfolio',
-                  title: 'Portfolio — Anisa',
-                  description: 'An elegant portfolio crafted for Anisa, presenting her professional journey and achievements in a clean, visually compelling format.',
-                  tech: ['Portfolio', 'Next.js', 'UI/UX'],
-                  url: 'https://portofolio-anisa.vercel.app/',
-                  color: '#ff6eb4',
-                },
-                {
-                  emoji: '🤖',
-                  tag: 'Machine Learning',
-                  title: 'Sales ML Analytics',
-                  description: 'An AI-powered sales analytics platform using machine learning to predict trends, analyze patterns, and give data-driven business insights.',
-                  tech: ['Python', 'Machine Learning', 'Streamlit'],
-                  url: 'https://sales-ml-analytics.streamlit.app/',
-                  color: '#ff8c42',
-                },
-                {
-                  emoji: '🛒',
-                  tag: 'E-Commerce',
-                  title: 'FreshMarket Online Store',
-                  description: 'A fully functional online store for fresh groceries — complete with product catalog, cart system, and a smooth checkout experience.',
-                  tech: ['E-Commerce', 'Next.js', 'Vercel'],
-                  url: 'https://ecommerce-freshmarket.vercel.app/',
-                  color: '#43e97b',
-                },
-              ].map((proj) => (
-                <div key={proj.title} className="portfolio-card fade-in" onMouseEnter={addHover} onMouseLeave={removeHover}>
-                  <div className="portfolio-image" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.4)', minHeight: '180px' }}>
-                    <span style={{ fontSize: '5rem', filter: 'drop-shadow(0 0 20px currentColor)' }}>{proj.emoji}</span>
-                    <div className="portfolio-overlay">
-                      <a href={proj.url} className="view-btn" target="_blank" rel="noopener">
-                        <span>🚀</span> View Live
-                      </a>
-                    </div>
-                  </div>
-                  <div className="portfolio-content">
-                    <span className="portfolio-tag" style={{ borderColor: proj.color, color: proj.color }}>{proj.tag}</span>
-                    <h3 className="portfolio-title">{proj.title}</h3>
-                    <p className="portfolio-description">{proj.description}</p>
-                    <div className="portfolio-tech">
-                      {proj.tech.map(t => <span key={t} className="tech-badge">{t}</span>)}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div style={{ textAlign: 'center', marginTop: '3rem' }}>
+            {/* Back button */}
+            <div style={{ marginBottom: '2rem' }}>
               <button
-                className="btn btn-secondary"
                 onClick={() => navigate('portfolio')}
                 onMouseEnter={addHover} onMouseLeave={removeHover}
+                style={{
+                  background: 'transparent',
+                  border: '1px solid rgba(0,255,136,0.35)',
+                  color: 'var(--neon-cyan)',
+                  padding: '0.5rem 1.2rem',
+                  borderRadius: '6px',
+                  cursor: 'none',
+                  fontSize: '0.85rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  fontFamily: 'inherit',
+                  transition: 'all 0.2s',
+                }}
               >
                 ← Back to Portfolio
               </button>
             </div>
+
+            {/* Header */}
+            <div className="section-header" style={{ marginBottom: '3rem' }}>
+              <span className="section-label">Live & Deployed</span>
+              <h2 className="section-title">Project Development</h2>
+              <p className="section-description" style={{ maxWidth: '600px', margin: '0 auto' }}>
+                Real-world web applications — designed, built, and shipped. Each project solves a
+                real problem, from managing your money to planning a holy month or showcasing someone's story online.
+              </p>
+            </div>
+
+            {/* Projects Grid */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+              gap: '2rem',
+            }}>
+
+              {/* MonFlow V2 */}
+              <div className="portfolio-card fade-in" onMouseEnter={addHover} onMouseLeave={removeHover}
+                style={{ display: 'flex', flexDirection: 'column' }}>
+                <div className="portfolio-image" style={{ position: 'relative' }}>
+                  <img
+                    src="https://images.unsplash.com/photo-1633158829585-23ba8f7c8caf?w=800&h=500&fit=crop&q=80"
+                    alt="MonFlow V2" loading="lazy"
+                  />
+                  <div className="portfolio-overlay">
+                    <a href="https://monflow-v2.web.app/" className="view-btn" target="_blank" rel="noopener">
+                      <span>🚀</span> View Live
+                    </a>
+                  </div>
+                  <div style={{
+                    position: 'absolute', top: '12px', left: '12px',
+                    background: 'linear-gradient(135deg, #00ff88, #00cc66)',
+                    color: '#0a0e17', fontSize: '0.7rem', fontWeight: 700,
+                    padding: '3px 10px', borderRadius: '20px', letterSpacing: '0.05em'
+                  }}>💰 Finance</div>
+                </div>
+                <div className="portfolio-content" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                  <span className="portfolio-tag">Finance Tool</span>
+                  <h3 className="portfolio-title">MonFlow V2</h3>
+                  <p className="portfolio-description" style={{ flex: 1 }}>
+                    A smart personal finance manager — track income, expenses, and cash flow in real-time.
+                    Built for clarity, speed, and everyday use.
+                  </p>
+                  <div className="portfolio-tech">
+                    {['Firebase', 'React', 'Realtime DB'].map(t => <span key={t} className="tech-badge">{t}</span>)}
+                  </div>
+                </div>
+              </div>
+
+              {/* Ramadhan Planner */}
+              <div className="portfolio-card fade-in" onMouseEnter={addHover} onMouseLeave={removeHover}
+                style={{ display: 'flex', flexDirection: 'column' }}>
+                <div className="portfolio-image" style={{ position: 'relative' }}>
+                  <img
+                    src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=500&fit=crop&q=80"
+                    alt="Ramadhan Planner" loading="lazy"
+                  />
+                  <div className="portfolio-overlay">
+                    <a href="https://ramadhan-planner2.vercel.app/" className="view-btn" target="_blank" rel="noopener">
+                      <span>🚀</span> View Live
+                    </a>
+                  </div>
+                  <div style={{
+                    position: 'absolute', top: '12px', left: '12px',
+                    background: 'linear-gradient(135deg, #a78bfa, #7c3aed)',
+                    color: '#fff', fontSize: '0.7rem', fontWeight: 700,
+                    padding: '3px 10px', borderRadius: '20px', letterSpacing: '0.05em'
+                  }}>🌙 Lifestyle</div>
+                </div>
+                <div className="portfolio-content" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                  <span className="portfolio-tag">Lifestyle App</span>
+                  <h3 className="portfolio-title">Ramadhan Planner</h3>
+                  <p className="portfolio-description" style={{ flex: 1 }}>
+                    Plan your most meaningful month with purpose. Track ibadah, set daily goals,
+                    and stay consistent throughout Ramadhan — all in one beautiful app.
+                  </p>
+                  <div className="portfolio-tech">
+                    {['Next.js', 'Vercel', 'LocalStorage'].map(t => <span key={t} className="tech-badge">{t}</span>)}
+                  </div>
+                </div>
+              </div>
+
+              {/* Web Sekolah PAUD */}
+              <div className="portfolio-card fade-in" onMouseEnter={addHover} onMouseLeave={removeHover}
+                style={{ display: 'flex', flexDirection: 'column' }}>
+                <div className="portfolio-image" style={{ position: 'relative' }}>
+                  <img
+                    src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&h=500&fit=crop&q=80"
+                    alt="Web Sekolah PAUD" loading="lazy"
+                  />
+                  <div className="portfolio-overlay">
+                    <a href="https://paud-fajar-pagi.vercel.app/" className="view-btn" target="_blank" rel="noopener">
+                      <span>🚀</span> View Live
+                    </a>
+                  </div>
+                  <div style={{
+                    position: 'absolute', top: '12px', left: '12px',
+                    background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+                    color: '#0a0e17', fontSize: '0.7rem', fontWeight: 700,
+                    padding: '3px 10px', borderRadius: '20px', letterSpacing: '0.05em'
+                  }}>🏫 Education</div>
+                </div>
+                <div className="portfolio-content" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                  <span className="portfolio-tag">School Website</span>
+                  <h3 className="portfolio-title">Web Sekolah PAUD Fajar Pagi</h3>
+                  <p className="portfolio-description" style={{ flex: 1 }}>
+                    A clean, welcoming website for an early childhood school. Built to help parents
+                    learn about the school, its programs, and how to enroll their little ones.
+                  </p>
+                  <div className="portfolio-tech">
+                    {['Next.js', 'Tailwind', 'Vercel'].map(t => <span key={t} className="tech-badge">{t}</span>)}
+                  </div>
+                </div>
+              </div>
+
+              {/* Portfolio M. Nazar */}
+              <div className="portfolio-card fade-in" onMouseEnter={addHover} onMouseLeave={removeHover}
+                style={{ display: 'flex', flexDirection: 'column' }}>
+                <div className="portfolio-image" style={{ position: 'relative' }}>
+                  <img
+                    src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=800&h=500&fit=crop&q=80"
+                    alt="Portfolio M Nazar" loading="lazy"
+                  />
+                  <div className="portfolio-overlay" style={{ gap: '0.6rem' }}>
+                    <a href="https://m-nazar.vercel.app/" className="view-btn" target="_blank" rel="noopener">
+                      <span>🚀</span> Nazar Portfolio
+                    </a>
+                    <a href="https://portofolio-anisa.vercel.app/" className="view-btn" target="_blank" rel="noopener">
+                      <span>✨</span> Anisa Portfolio
+                    </a>
+                  </div>
+                  <div style={{
+                    position: 'absolute', top: '12px', left: '12px',
+                    background: 'linear-gradient(135deg, #00d4ff, #0ea5e9)',
+                    color: '#0a0e17', fontSize: '0.7rem', fontWeight: 700,
+                    padding: '3px 10px', borderRadius: '20px', letterSpacing: '0.05em'
+                  }}>🎨 Portfolio</div>
+                </div>
+                <div className="portfolio-content" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                  <span className="portfolio-tag">Personal Portfolio</span>
+                  <h3 className="portfolio-title">Portfolio Sites</h3>
+                  <p className="portfolio-description" style={{ flex: 1 }}>
+                    Custom-built portfolio websites for real clients — designed to make strong first impressions,
+                    showcase their skills, and open doors to new opportunities.
+                  </p>
+                  <div className="portfolio-tech">
+                    {['Next.js', 'CSS', 'Vercel', 'Custom Design'].map(t => <span key={t} className="tech-badge">{t}</span>)}
+                  </div>
+                </div>
+              </div>
+
+
+              {/* Machine Learning */}
+              <div className="portfolio-card fade-in" onMouseEnter={addHover} onMouseLeave={removeHover}
+                style={{ display: 'flex', flexDirection: 'column' }}>
+                <div className="portfolio-image" style={{ position: 'relative' }}>
+                  <img
+                    src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=500&fit=crop&q=80"
+                    alt="Sales ML Analytics" loading="lazy"
+                  />
+                  <div className="portfolio-overlay">
+                    <a href="https://sales-ml-analytics.streamlit.app/" className="view-btn" target="_blank" rel="noopener">
+                      <span>🚀</span> View Live
+                    </a>
+                  </div>
+                  <div style={{
+                    position: 'absolute', top: '12px', left: '12px',
+                    background: 'linear-gradient(135deg, #f97316, #ea580c)',
+                    color: '#fff', fontSize: '0.7rem', fontWeight: 700,
+                    padding: '3px 10px', borderRadius: '20px', letterSpacing: '0.05em'
+                  }}>🤖 AI / ML</div>
+                </div>
+                <div className="portfolio-content" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                  <span className="portfolio-tag">Machine Learning</span>
+                  <h3 className="portfolio-title">Sales ML Analytics</h3>
+                  <p className="portfolio-description" style={{ flex: 1 }}>
+                    An AI-powered analytics platform that uses machine learning to uncover sales patterns,
+                    forecast trends, and deliver actionable business insights — all in real-time.
+                  </p>
+                  <div className="portfolio-tech">
+                    {['Python', 'Streamlit', 'Machine Learning', 'Data Science'].map(t => <span key={t} className="tech-badge">{t}</span>)}
+                  </div>
+                </div>
+              </div>
+
+              {/* Online Store */}
+              <div className="portfolio-card fade-in" onMouseEnter={addHover} onMouseLeave={removeHover}
+                style={{ display: 'flex', flexDirection: 'column' }}>
+                <div className="portfolio-image" style={{ position: 'relative' }}>
+                  <img
+                    src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&h=500&fit=crop&q=80"
+                    alt="FreshMarket Online Store" loading="lazy"
+                  />
+                  <div className="portfolio-overlay">
+                    <a href="https://ecommerce-freshmarket.vercel.app/" className="view-btn" target="_blank" rel="noopener">
+                      <span>🚀</span> View Live
+                    </a>
+                  </div>
+                  <div style={{
+                    position: 'absolute', top: '12px', left: '12px',
+                    background: 'linear-gradient(135deg, #22c55e, #16a34a)',
+                    color: '#fff', fontSize: '0.7rem', fontWeight: 700,
+                    padding: '3px 10px', borderRadius: '20px', letterSpacing: '0.05em'
+                  }}>🛒 E-Commerce</div>
+                </div>
+                <div className="portfolio-content" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                  <span className="portfolio-tag">Online Store</span>
+                  <h3 className="portfolio-title">FreshMarket Online Store</h3>
+                  <p className="portfolio-description" style={{ flex: 1 }}>
+                    A fully functional e-commerce store for fresh groceries — complete with product catalog,
+                    cart system, and a smooth, intuitive checkout experience.
+                  </p>
+                  <div className="portfolio-tech">
+                    {['Next.js', 'E-Commerce', 'Vercel', 'Tailwind'].map(t => <span key={t} className="tech-badge">{t}</span>)}
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Bottom CTA */}
+            <div style={{
+              marginTop: '4rem', textAlign: 'center',
+              padding: '2.5rem 2rem',
+              background: 'rgba(0,255,136,0.04)',
+              border: '1px solid rgba(0,255,136,0.12)',
+              borderRadius: '12px',
+            }}>
+              <div style={{ fontSize: '2rem', marginBottom: '0.8rem' }}>⚡</div>
+              <h3 style={{ fontFamily: 'inherit', fontSize: '1.2rem', color: '#fff', marginBottom: '0.6rem' }}>
+                Got a project in mind?
+              </h3>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1.5rem', maxWidth: '420px', margin: '0 auto 1.5rem' }}>
+                Whether it's a web app, a landing page, or something completely new —
+                let's turn your idea into something real.
+              </p>
+              <a
+                href="#contact"
+                className="btn btn-primary"
+                onClick={(e) => { e.preventDefault(); navigate('contact') }}
+                onMouseEnter={addHover} onMouseLeave={removeHover}
+              >
+                Let's Work Together 🚀
+              </a>
+            </div>
+
           </div>
         </section>
       )}
