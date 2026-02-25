@@ -45,7 +45,7 @@ const portfolioData = [
     tech: ['Web App', 'Development', 'Firebase'],
     img: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=500&fit=crop&q=80',
     alt: 'MonFlow V2',
-    liveUrl: '#project-dev',
+    liveUrl: '#project-page',
     noGallery: true,
   },
   {
@@ -451,9 +451,9 @@ export default function Home() {
                     <div className="portfolio-overlay">
                       {/* Live button — hanya jika ada liveUrl */}
                       {item.liveUrl && (
-                        item.liveUrl === '#project-dev'
+                        item.liveUrl === '#project-page'
                           ? <a href="#" className="view-btn" style={{ marginBottom: item.images ? '0.7rem' : '0' }}
-                              onClick={(e) => { e.preventDefault(); navigate('project-dev') }}>
+                              onClick={(e) => { e.preventDefault(); navigate('project-page') }}>
                               <span>🚀</span> View Live
                             </a>
                           : <a href={item.liveUrl} className="view-btn" style={{ marginBottom: item.images ? '0.7rem' : '0' }} target="_blank" rel="noopener">
