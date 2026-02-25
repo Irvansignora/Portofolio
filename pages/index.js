@@ -569,7 +569,7 @@ export default function Home() {
                 style={{ display: 'flex', flexDirection: 'column' }}>
                 <div className="portfolio-image" style={{ position: 'relative' }}>
                   <img
-                    src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=500&fit=crop&q=80"
+                    src="https://static.promediateknologi.id/crop/0x0:0x0/0x0/webp/photo/p2/01/2025/02/25/image-48-339991454.png"
                     alt="Ramadhan Planner" loading="lazy"
                   />
                   <div className="portfolio-overlay">
