@@ -45,7 +45,7 @@ const portfolioData = [
     tech: ['Web App', 'Development', 'Firebase'],
     img: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=500&fit=crop&q=80',
     alt: 'MonFlow V2',
-    liveUrl: 'https://monflow-v2.web.app/',
+    liveUrl: '#project-dev',
     noGallery: true,
   },
   {
@@ -451,9 +451,14 @@ export default function Home() {
                     <div className="portfolio-overlay">
                       {/* Live button — hanya jika ada liveUrl */}
                       {item.liveUrl && (
-                        <a href={item.liveUrl} className="view-btn" style={{ marginBottom: item.images ? '0.7rem' : '0' }} target="_blank" rel="noopener">
-                          <span>🚀</span> View Live
-                        </a>
+                        item.liveUrl === '#project-dev'
+                          ? <a href="#" className="view-btn" style={{ marginBottom: item.images ? '0.7rem' : '0' }}
+                              onClick={(e) => { e.preventDefault(); navigate('project-dev') }}>
+                              <span>🚀</span> View Live
+                            </a>
+                          : <a href={item.liveUrl} className="view-btn" style={{ marginBottom: item.images ? '0.7rem' : '0' }} target="_blank" rel="noopener">
+                              <span>🚀</span> View Live
+                            </a>
                       )}
                       {/* Gallery / Certificate button — hanya jika ada images */}
                       {item.images && (
@@ -480,6 +485,119 @@ export default function Home() {
 
         </section>
       )}
+      {/* ===== PROJECT DEVELOPMENT ===== */}
+      {activePage === 'project-dev' && (
+        <section className="section page-section active" id="project-dev">
+          <div className="container">
+            <div className="section-header">
+              <span className="section-label">Live Projects</span>
+              <h2 className="section-title">Project Development</h2>
+              <p className="section-description">
+                From idea to deployment — here are real-world digital products that have been built, shipped, and are running live.
+                Each project reflects a commitment to clean code, thoughtful design, and meaningful user experience.
+              </p>
+            </div>
+
+            <div className="portfolio-grid">
+              {[
+                {
+                  emoji: '💰',
+                  tag: 'Finance App',
+                  title: 'MonFlow V2',
+                  description: 'A smart personal finance manager to track income, expenses, and cash flow — beautifully visualized and intuitively designed for daily use.',
+                  tech: ['Firebase', 'Web App', 'Finance'],
+                  url: 'https://monflow-v2.web.app/',
+                  color: '#00f0ff',
+                },
+                {
+                  emoji: '🌙',
+                  tag: 'Lifestyle App',
+                  title: 'Ramadhan Planner',
+                  description: 'A dedicated Ramadhan companion app to plan ibadah, track sehri & iftar schedules, and make the most out of every blessed day.',
+                  tech: ['Planner', 'Web App', 'Lifestyle'],
+                  url: 'https://ramadhan-planner2.vercel.app/',
+                  color: '#b388ff',
+                },
+                {
+                  emoji: '🏫',
+                  tag: 'Education',
+                  title: 'Website School — PAUD Fajar Pagi',
+                  description: 'A warm and welcoming school website for early childhood education, designed to inform parents and showcase the school\'s learning environment.',
+                  tech: ['Next.js', 'School', 'Education'],
+                  url: 'https://paud-fajar-pagi.vercel.app/',
+                  color: '#ffcc00',
+                },
+                {
+                  emoji: '🧑‍💻',
+                  tag: 'Portfolio',
+                  title: 'Portfolio — M. Nazar',
+                  description: 'A sleek personal portfolio website built to showcase professional experience, projects, and skills with a modern and responsive layout.',
+                  tech: ['Portfolio', 'Next.js', 'UI/UX'],
+                  url: 'https://m-nazar.vercel.app/',
+                  color: '#00ff88',
+                },
+                {
+                  emoji: '👩‍💼',
+                  tag: 'Portfolio',
+                  title: 'Portfolio — Anisa',
+                  description: 'An elegant portfolio crafted for Anisa, presenting her professional journey and achievements in a clean, visually compelling format.',
+                  tech: ['Portfolio', 'Next.js', 'UI/UX'],
+                  url: 'https://portofolio-anisa.vercel.app/',
+                  color: '#ff6eb4',
+                },
+                {
+                  emoji: '🤖',
+                  tag: 'Machine Learning',
+                  title: 'Sales ML Analytics',
+                  description: 'An AI-powered sales analytics platform using machine learning to predict trends, analyze patterns, and give data-driven business insights.',
+                  tech: ['Python', 'Machine Learning', 'Streamlit'],
+                  url: 'https://sales-ml-analytics.streamlit.app/',
+                  color: '#ff8c42',
+                },
+                {
+                  emoji: '🛒',
+                  tag: 'E-Commerce',
+                  title: 'FreshMarket Online Store',
+                  description: 'A fully functional online store for fresh groceries — complete with product catalog, cart system, and a smooth checkout experience.',
+                  tech: ['E-Commerce', 'Next.js', 'Vercel'],
+                  url: 'https://ecommerce-freshmarket.vercel.app/',
+                  color: '#43e97b',
+                },
+              ].map((proj) => (
+                <div key={proj.title} className="portfolio-card fade-in" onMouseEnter={addHover} onMouseLeave={removeHover}>
+                  <div className="portfolio-image" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.4)', minHeight: '180px' }}>
+                    <span style={{ fontSize: '5rem', filter: 'drop-shadow(0 0 20px currentColor)' }}>{proj.emoji}</span>
+                    <div className="portfolio-overlay">
+                      <a href={proj.url} className="view-btn" target="_blank" rel="noopener">
+                        <span>🚀</span> View Live
+                      </a>
+                    </div>
+                  </div>
+                  <div className="portfolio-content">
+                    <span className="portfolio-tag" style={{ borderColor: proj.color, color: proj.color }}>{proj.tag}</span>
+                    <h3 className="portfolio-title">{proj.title}</h3>
+                    <p className="portfolio-description">{proj.description}</p>
+                    <div className="portfolio-tech">
+                      {proj.tech.map(t => <span key={t} className="tech-badge">{t}</span>)}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ textAlign: 'center', marginTop: '3rem' }}>
+              <button
+                className="btn btn-secondary"
+                onClick={() => navigate('portfolio')}
+                onMouseEnter={addHover} onMouseLeave={removeHover}
+              >
+                ← Back to Portfolio
+              </button>
+            </div>
+          </div>
+        </section>
+      )}
+
       {activePage === 'skills' && (
         <section className="section page-section active" id="skills">
           <div className="container">
