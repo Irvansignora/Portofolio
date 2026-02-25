@@ -453,7 +453,7 @@ export default function Home() {
                       {item.liveUrl && (
                         item.liveUrl === '#project-page'
                           ? <a href="#" className="view-btn" style={{ marginBottom: item.images ? '0.7rem' : '0' }}
-                              onClick={(e) => { e.preventDefault(); navigate('project-page') }}>
+                              onClick={(e) => { e.preventDefault(); navigate('projects') }}>
                               <span>🚀</span> View Live
                             </a>
                           : <a href={item.liveUrl} className="view-btn" style={{ marginBottom: item.images ? '0.7rem' : '0' }} target="_blank" rel="noopener">
