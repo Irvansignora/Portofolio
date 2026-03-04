@@ -845,7 +845,7 @@ export default function Home() {
               <div className="contact-panel fade-in">
                 <h3>Contact Information</h3>
                 {[
-                  { icon: '📧', label: 'Email', value: 'irpanyasin@gmail.com', href: 'mailto:irpanyasin@gmail.com' },
+                  { icon: '📧', label: 'Email', value: 'irvansignora@gmail.com', href: 'mailto:irvansignora@gmail.com' },
                   { icon: '📱', label: 'Phone / WhatsApp', value: '+62 857-7607-7292', href: 'tel:+6285776077292' },
                   { icon: '📍', label: 'Location', value: 'Bandung, West Java, Indonesia', href: null },
                 ].map((detail) => (
@@ -862,7 +862,7 @@ export default function Home() {
                 ))}
                 <div className="social-grid">
                   <a href="https://wa.me/6285776077292" className="social-btn" title="WhatsApp" target="_blank" rel="noopener" onMouseEnter={addHover} onMouseLeave={removeHover}>💬</a>
-                  <a href="mailto:irpanyasin@gmail.com" className="social-btn" title="Email" onMouseEnter={addHover} onMouseLeave={removeHover}>✉️</a>
+                  <a href="mailto:irvansignora@gmail.com" className="social-btn" title="Email" onMouseEnter={addHover} onMouseLeave={removeHover}>✉️</a>
                 </div>
               </div>
 
