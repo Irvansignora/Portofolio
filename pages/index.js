@@ -123,7 +123,34 @@ const socialData = [
 ]
 
 export default function Home() {
+  const welcomeRef = useRef(null)
+  const [loaded, setLoaded] = useState(false)
+  const [narrate, setNarrate] = useState(false)
+  const [speechAvailable, setSpeechAvailable] = useState(false)
+  const [speechError, setSpeechError] = useState('')
+  useEffect(() => {
+    setSpeechAvailable('speechSynthesis' in window)
+    const timer = setTimeout(() => { setLoaded(true); welcomeRef.current?.showModal() }, 800)
+    return () => clearTimeout(timer)
+  }, [])
+  const readPage = () => {
+    if (!('speechSynthesis' in window)) return
+    window.speechSynthesis.cancel()
+    const text = document.querySelector('.page-section.active')?.innerText
+    if (!text) return
+    setSpeechError('')
+    const speech = new SpeechSynthesisUtterance(text)
+    speech.lang = 'en-US'
+    speech.onerror = (event) => {
+      if (!['interrupted', 'canceled'].includes(event.error)) setSpeechError('Suara tidak tersedia. Silakan baca halaman atau coba lagi.')
+    }
+    window.speechSynthesis.speak(speech)
+  }
   const [activePage, setActivePage] = useState('home')
+  useEffect(() => {
+    if (narrate) readPage()
+    return () => { if ('speechSynthesis' in window) window.speechSynthesis.cancel() }
+  }, [activePage, narrate])
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrollPct, setScrollPct] = useState(0)
   const [showTop, setShowTop] = useState(false)
@@ -276,6 +303,24 @@ export default function Home() {
       <Head>
         <title>Muhamad Irpan Yasin — Professional Portfolio</title>
       </Head>
+
+      {!loaded && <div className="assistant-loading" role="status">Memuat portofolio…</div>}
+      <dialog ref={welcomeRef} className="assistant-dialog">
+        <img className="assistant-avatar" src="/aiko-assistant.png" alt="Aiko, asisten virtual bergaya anime Jepang" width="220" height="220" />
+        <h2>Konnichiwa, aku Aiko!</h2>
+        <p>Asisten virtual portofolio Irpan siap menemanimu. Mau mulai dari halaman mana?</p>
+        <label><input type="checkbox" checked={narrate} disabled={!speechAvailable} onChange={e => setNarrate(e.target.checked)} /> Bacakan setiap halaman (bahasa Inggris)</label>
+        {!speechAvailable && <p>Browser ini belum mendukung pembaca suara.</p>}
+        <div className="assistant-choices">
+          {['home', 'portfolio', 'projects', 'skills', 'social', 'contact'].map(page => <button key={page} onClick={() => { navigate(page); welcomeRef.current.close(); if (narrate && page === activePage) readPage() }}>{page}</button>)}
+        </div>
+        <button onClick={() => welcomeRef.current.close()}>Masuk ke website</button>
+      </dialog>
+      {loaded && <aside className="assistant-controls" aria-label="Asisten portofolio">
+        <button onClick={() => welcomeRef.current.showModal()} aria-label="Pilih halaman bersama asisten"><img src="/aiko-assistant.png" alt="" width="36" height="36" /> Aiko · Menu</button>
+        {speechAvailable && <><button onClick={readPage}>Bacakan</button><button onClick={() => { setNarrate(false); window.speechSynthesis.cancel() }}>Hentikan</button></>}
+        {speechError && <p role="status">{speechError}</p>}
+      </aside>}
 
       {/* Cursor */}
       <div className="cursor" ref={cursorRef} />
@@ -531,6 +576,12 @@ export default function Home() {
               gap: '2rem',
             }}>
 
+              <article className="portfolio-card" style={{ padding: '2rem' }}>
+                <div style={{ fontSize: '3rem' }} aria-hidden="true">📒</div>
+                <h3>Kakeibo</h3>
+                <p>Explore Kakeibo, a live web project.</p>
+                <a href="https://kakeibo.iranza.com" target="_blank" rel="noopener noreferrer" className="btn btn-primary">Visit Kakeibo ↗</a>
+              </article>
               {/* Finance Manager */}
               <div className="portfolio-card fade-in" onMouseEnter={addHover} onMouseLeave={removeHover}
                 style={{ display: 'flex', flexDirection: 'column' }}>

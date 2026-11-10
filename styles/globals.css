@@ -1462,3 +1462,15 @@ body.lightbox-open .back-to-top { opacity: 0 !important; pointer-events: none !i
   .section-title { font-size: 2rem; }
   .language-badges { grid-template-columns: 1fr 1fr; }
 }
+
+.assistant-loading { position:fixed; inset:0; z-index:100000; background:#080c18; color:white; display:grid; place-items:center; }
+.assistant-dialog { color:#eefaff; background:#101a2c; border:1px solid #00eaff; border-radius:24px; padding:28px; width:min(520px,90vw); max-height:85vh; overflow:auto; margin:auto; }
+.assistant-dialog::backdrop { background:rgba(0,0,0,.85); }
+.assistant-avatar { display:block; width:220px; height:220px; max-width:100%; object-fit:cover; margin:0 auto 20px; border-radius:50%; border:2px solid #52e9ff; box-shadow:0 0 36px #00eaff30; }
+.assistant-controls button { display:inline-flex; align-items:center; gap:8px; }
+.assistant-controls img { border-radius:50%; object-fit:cover; }
+.assistant-dialog p { margin:16px 0; }
+.assistant-choices { display:flex; flex-wrap:wrap; gap:8px; margin:20px 0; }
+.assistant-dialog button,.assistant-controls button { cursor:pointer; padding:10px 14px; color:#eefaff; background:#162d46; border:1px solid #42c8dc; border-radius:10px; }
+.assistant-dialog button:focus-visible,.assistant-controls button:focus-visible { outline:3px solid white; outline-offset:3px; }
+.assistant-controls { position:fixed; bottom:16px; left:16px; z-index:1000; display:flex; flex-wrap:wrap; gap:6px; max-width:90vw; }
